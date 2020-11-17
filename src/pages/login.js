@@ -12,6 +12,8 @@ import SEO from "../components/seo"
 import { Image } from "../components/image"
 import { handleLogin } from '../services/auth'
 import { isAuthenticated, getAuthUser } from '../services/auth'
+import { window, document, exists } from 'browser-monads';
+
 class Login extends React.Component {
 
     constructor(props) {
