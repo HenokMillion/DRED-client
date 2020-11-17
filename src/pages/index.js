@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 
 export default function IndexPage() {
 
-  function __logout() {
+  function __logout(e) {
     logout(() => navigate('/login'))
   }
   const handleClickOpen = () => {
@@ -40,7 +40,7 @@ export default function IndexPage() {
       <NewDiagnosis />
       <Link to="/login/">Login</Link> <br />
 
-      <p to="#" onClick={() => __logout()}>Logout</p>
+      <p to="#" onClick={(e) => __logout(e)}>Logout</p>
     </Layout>
   )
 }

@@ -26,7 +26,7 @@ export const isBrowser = () => typeof window !== "undefined"
 export const getAuthUser = () => {
   const _authUser = JSON.parse(localAdapter.getItem('AUTH_USER'))
   console.log('_authUser: ', _authUser)
-  if (_authUser.iat) { return _authUser }
+  if (_authUser && _authUser.iat) { return _authUser }
   else { return false }
 }
 
