@@ -5,20 +5,20 @@ const AUTH_URL = 'http://localhost:3000/api/v1/auth'
 let authUser = {}
 
 const setAuthUser = user =>
-  window.localStorage.setItem('AUTH_USER', JSON.stringify(user))
+  localStorage.setItem('AUTH_USER', JSON.stringify(user))
 
 const saveToken = token =>
-  window.localStorage.setItem('AUTH_TOKEN', token)
+  localStorage.setItem('AUTH_TOKEN', token)
 
 export const isBrowser = () => typeof window !== "undefined"
 
 // export const getUser = () =>
-//   isBrowser() && window.localStorage.getItem("gatsbyUser")
-//     ? JSON.parse(window.localStorage.getItem("gatsbyUser"))
+//   isBrowser() && localStorage.getItem("gatsbyUser")
+//     ? JSON.parse(localStorage.getItem("gatsbyUser"))
 //     : {}
 
 export const getAuthUser = () => {
-  const _authUser = JSON.parse(window.localStorage.getItem('AUTH_USER'))
+  const _authUser = JSON.parse(localStorage.getItem('AUTH_USER'))
   console.log('_authUser: ', _authUser)
   if (Object.keys(_authUser).length > 0) { return _authUser }
   else { return false }
