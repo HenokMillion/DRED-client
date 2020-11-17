@@ -1,9 +1,15 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 
 import Layout from "../components/layout"
 import { Image } from "../components/image"
 import SEO from "../components/seo"
+import { logout } from '../services/auth'
+
+function __logout() {
+  logout(() => navigate('/login'))
+}
+
 
 const IndexPage = () => (
   <Layout>
@@ -15,7 +21,7 @@ const IndexPage = () => (
       <Image/>
     </div>
     <Link to="/login/">Login</Link> <br />
-    <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
+    <p to="#" onClick={() => __logout()}>Logout</p>
   </Layout>
 )
 
