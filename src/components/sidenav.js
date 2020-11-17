@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -27,6 +27,8 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Button from '@material-ui/core/Button';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { getAuthUser, isAuthenticated } from '../services/auth'
+
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -102,8 +104,9 @@ const useStyles = makeStyles((theme) => ({
 
 function ResponsiveDrawer(props) {
 
-    if (!isAuthenticated()) { navigate('/login') }
-
+    useEffect(() => {
+        if (!isAuthenticated()) { navigate('/login') }
+    })
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();

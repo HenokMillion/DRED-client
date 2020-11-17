@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Link } from "gatsby"
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
@@ -12,7 +12,6 @@ import SEO from "../components/seo"
 import { Image } from "../components/image"
 import { handleLogin } from '../services/auth'
 import { isAuthenticated, getAuthUser } from '../services/auth'
-import { window, document, exists } from 'browser-monads';
 
 class Login extends React.Component {
 
@@ -23,9 +22,11 @@ class Login extends React.Component {
             user: { username: '', password: '' }
         }
         console.log(isAuthenticated(), getAuthUser())
-        if (isAuthenticated()) {
-            navigate('/')
-        }
+        useEffect(() => {
+            if (isAuthenticated()) {
+                navigate('/')
+            }
+        })
     }
 
     renderProgress() {
@@ -46,7 +47,9 @@ class Login extends React.Component {
         const loginSuccess = await handleLogin(this.state.user)
         this.setState({ loggingIn: true })
         if (loginSuccess) {
-            navigate('/')
+            useEffect(() => {
+                navigate('/')
+            })
             console.log('LOGIN SUCCESS', loginSuccess)
         } else {
             //

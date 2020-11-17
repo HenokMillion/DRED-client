@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Link, navigate } from "gatsby"
 
 import Layout from "../components/layout"
@@ -12,7 +12,9 @@ import Button from '@material-ui/core/Button';
 export default function IndexPage() {
 
   function __logout(e) {
-    logout(() => navigate('/login'))
+    useEffect(() => {
+      logout(() => navigate('/login'))
+    })
   }
   const handleClickOpen = () => {
     setOpen(true);
