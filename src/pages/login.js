@@ -6,11 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { navigate } from "gatsby"
 
 import SEO from "../components/seo"
 import { Image } from "../components/image"
 import { handleLogin } from '../services/auth'
-
+import { isAuthenticated, getAuthUser } from '../services/auth'
 class Login extends React.Component {
 
     constructor(props) {
@@ -18,6 +19,10 @@ class Login extends React.Component {
         this.state = {
             loggingIn: false,
             user: { username: '', password: '' }
+        }
+        console.log(isAuthenticated(), getAuthUser())
+        if (isAuthenticated()) {
+            navigate('/')
         }
     }
 
@@ -37,17 +42,15 @@ class Login extends React.Component {
         e.preventDefault();
         console.log(this.state.user)
         const loginSuccess = await handleLogin(this.state.user)
-        this.setState({loggingIn: true})
-        setTimeout(() => {
-            if (loginSuccess) {
-                //
-                console.log('LOGIN SUCCESS', loginSuccess)
-            } else {
-                //
-                console.log('LOGIN FAILED', loginSuccess)
-            }
-            this.setState({loggingIn: false})
-        }, 5000)
+        this.setState({ loggingIn: true })
+        if (loginSuccess) {
+            navigate('/')
+            console.log('LOGIN SUCCESS', loginSuccess)
+        } else {
+            //
+            console.log('LOGIN FAILED', loginSuccess)
+        }
+        this.setState({ loggingIn: false })
     }
 
     render() {
@@ -68,10 +71,10 @@ class Login extends React.Component {
                                 </Grid>
                                 <form onSubmit={e => this.login(e)}>
                                     <Grid item container>
-                                        <TextField disabled={this.state.loggingIn} onChange={e => this.setState({user: { username: e.target.value, password: this.state.user.password }})} id="username" label="Username" variant="outlined" />
+                                        <TextField disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: e.target.value, password: this.state.user.password } })} id="username" label="Username" variant="outlined" />
                                     </Grid>
                                     <Grid item container>
-                                        <TextField disabled={this.state.loggingIn} onChange={e => this.setState({user: { username: this.state.user.username, password: e.target.value }})} id="password" label="Password" type="password" variant="outlined" />
+                                        <TextField disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: this.state.user.username, password: e.target.value } })} id="password" label="Password" type="password" variant="outlined" />
                                     </Grid>
                                     <Grid item container>
                                         <Link to="#">Forgot Password?</Link>
