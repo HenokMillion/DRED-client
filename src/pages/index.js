@@ -7,41 +7,40 @@ import SEO from "../components/seo"
 import { logout } from '../services/auth'
 import NewDiagnosis from '../components/newDiagnosis'
 import Slide from '@material-ui/core/Slide';
+import Button from '@material-ui/core/Button';
 
-function __logout() {
-  logout(() => navigate('/login'))
-}
-const handleClickOpen = () => {
-  setOpen(true);
-};
+export default function IndexPage() {
 
-const handleClose = () => {
-  setOpen(false);
-};
+  function __logout() {
+    logout(() => navigate('/login'))
+  }
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-const [open, setOpen] = React.useState(false);
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-      Open full-screen dialog
-      </Button>
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <h1>Hi people</h1>
+      <p>Welcome to your new Gatsby site.</p>
+      <p>Now go build something great.</p>
+      <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
+        <Image />
+      </div>
       <NewDiagnosis />
-    <Link to="/login/">Login</Link> <br />
+      <Link to="/login/">Login</Link> <br />
 
-    <p to="#" onClick={() => __logout()}>Logout</p>
-  </Layout>
-)
-
-export default IndexPage
+      <p to="#" onClick={() => __logout()}>Logout</p>
+    </Layout>
+  )
+}
