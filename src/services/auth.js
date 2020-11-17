@@ -7,7 +7,6 @@ const localAdapter = windowGlobal ?
   windowGlobal.localStorage :
   memoryStorage
 
-
 const AUTH_URL = 'http://localhost:3000/api/v1/auth'
 let authUser = {}
 
@@ -27,7 +26,7 @@ export const isBrowser = () => typeof window !== "undefined"
 export const getAuthUser = () => {
   const _authUser = JSON.parse(localAdapter.getItem('AUTH_USER'))
   console.log('_authUser: ', _authUser)
-  if (Object.keys(_authUser).length > 0) { return _authUser }
+  if (_authUser.iat) { return _authUser }
   else { return false }
 }
 
