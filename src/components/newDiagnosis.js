@@ -24,6 +24,8 @@ import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import CenterFocusStrongOutlinedIcon from '@material-ui/icons/CenterFocusStrongOutlined';
 import * as apiService from '../services/api.service';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,11 +49,47 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
     },
     fileInputContainer: {
-        position: 'relative'
+        position: 'relative',
+        height: '60%',
+        width: '80%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        paddingTop: '30px',
+        marginBottom: '30px'
     },
     loadingCover: {
         width: '100%', height: '100%',
         zIndex: '9', backgroundColor: '#e0e0e0', position: 'absolute', opacity: '.3'
+    },
+    doctorArea: {
+        paddingLeft: '10px',
+        paddingTop: '30px !important'
+    },
+    imageArea: {
+        paddingTop: '40px !important',
+        display: 'flex',
+        // justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column'
+    },
+    scanImage: {
+        width: '100%',
+        height: '100%',
+    },
+    flexColCentered: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column'
+    },
+    imageFab: {
+        position: 'absolute',
+        right: '10px',
+        bottom: '10px',
+        backgroundColor: 'white',
+        borderRadius: '50%'
     }
 }));
 
@@ -111,8 +149,10 @@ export default function NewDiagnosis() {
     const [selectedValue, setSelectedValue] = React.useState('a');
     const [value, setValue] = React.useState('0');
     const [comment, setComment] = React.useState('');
+    const [file, setFile] = React.useState('');
+    const [filePath, setFilePath] = React.useState('');
+    const [diagnosing, setDiagnosing] = React.useState(false);
 
-    let file = null
     let doctorId = '5faa5d122de51f1cc15226bf'
     let patientId = '1234'
     let diagnosisResult = {}
@@ -130,21 +170,45 @@ export default function NewDiagnosis() {
     };
 
     const fileChangeHandler = (e) => {
-        file = e.target.files[0]
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0])
+            var reader = new FileReader();
+            reader.onload = function (_e) {
+                setFilePath(_e.target.result);
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
     }
 
     const renderLoadingCover = () => {
-        return !diagnosis.severity ? (
+        return diagnosing ? (
+            <CircularProgress size={24} style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: -12,
+                marginLeft: -12
+            }} />
+            // <div className={classes.loadingCover}>
+            // </div>
+        ) : null
+    }
+
+    const renderNoDiagnosis = () => {
+        return !diagnosis.severity || diagnosing ? (
             <Paper className={classes.loadingCover}></Paper>
         ) : null
     }
 
     const diagnose = () => {
-        apiService.saveDiagnosis(file, doctorId, patientId)
-            .then(resp => {
-                setDiagnosis(resp.data.data)
-                console.log(diagnosis)
-            })
+        setDiagnosing(true)
+        setTimeout(() => {
+            apiService.saveDiagnosis(file, doctorId, patientId)
+                .then(resp => {
+                    setDiagnosis(resp.data.data)
+                })
+                .finally(() => setDiagnosing(false))
+        }, 3000)
     }
 
     const handleEditDiagnosis = () => {
@@ -173,27 +237,46 @@ export default function NewDiagnosis() {
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             New Diagnosis
-            </Typography>
+                        </Typography>
                     </Toolbar>
                 </AppBar>
-                <Container>
+                <Container className={classes.contentContainer}>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={4} className={classes.imageArea}>
                             <Paper variant="outlined" square className={classes.fileInputContainer}>
-                                <AddIcon /> <p>Add Retina Image</p>
+                                {
+                                    !file ? (
+                                        <div className={classes.flexColCentered}>
+                                            <AddIcon /> <p>Add Retina Image</p>
+                                        </div>
+                                    ) : <img className={classes.scanImage} src={filePath} />
+                                }
                                 <input
                                     accept="image/*"
                                     className={classes.input}
-                                    id="contained-button-file"
+                                    id="scan-image"
                                     multiple
                                     type="file"
                                     onChange={e => fileChangeHandler(e)}
                                 />
+                                <label htmlFor="scan-image" className={classes.imageFab} hidden={!filePath}>
+                                    <Paper elevation={3} style={{ borderRadius: '50%' }}>
+                                        <IconButton color="primary" aria-label="upload scan image" component="span">
+                                            <CenterFocusStrongOutlinedIcon />
+                                        </IconButton>
+                                    </Paper>
+                                </label>
                             </Paper>
-                            <Button variant="contained" color="primary" onClick={diagnose}>Diagnose</Button>
+                            <Button variant="contained" color="primary" onClick={diagnose} disabled={!filePath || diagnosing}>
+                                <div>
+                                    <span>Diagnose</span>
+                                    {renderLoadingCover()}
+                                </div>
+                            </Button>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            { renderLoadingCover() }
+                        <Grid item xs={12} sm={8} className={classes.doctorArea}>
+                            {renderNoDiagnosis()}
+                            <Container>
                                 <Typography variant="h6" component="h6">
                                     System Diagnosis Prediction
                                  </Typography>
@@ -232,10 +315,11 @@ export default function NewDiagnosis() {
                                     <Button autoFocus color="inherit" onClick={handleClose}>
                                         cancel
                                 </Button>
-                                    <Button autoFocus variant="contained" color="primary" onClick={handleEditDiagnosis}>
+                                    <Button disabled={!diagnosis.severity} autoFocus variant="contained" color="primary" onClick={handleEditDiagnosis}>
                                         save
                                 </Button>
                                 </div>
+                            </Container>
                         </Grid>
                     </Grid>
                 </Container>
