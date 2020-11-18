@@ -10,12 +10,12 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 
 export default function IndexPage() {
-
-  function __logout(e) {
-    useEffect(() => {
+  let __logout = () => { }
+  useEffect(() => {
+    __logout = (e) => {
       logout(() => navigate('/login'))
-    })
-  }
+    }
+  })
   const handleClickOpen = () => {
     setOpen(true);
   };

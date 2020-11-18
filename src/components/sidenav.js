@@ -107,6 +107,7 @@ function ResponsiveDrawer(props) {
     useEffect(() => {
         if (!isAuthenticated()) { navigate('/login') }
     })
+    
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();

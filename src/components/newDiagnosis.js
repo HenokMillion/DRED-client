@@ -23,6 +23,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import CenterFocusStrongOutlinedIcon from '@material-ui/icons/CenterFocusStrongOutlined';
+import * as apiService from '../services/api.service';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
     },
     fileInputContainer: {
         position: 'relative'
+    },
+    loadingCover: {
+        width: '100%', height: '100%',
+        zIndex: '9', backgroundColor: '#e0e0e0', position: 'absolute', opacity: '.3'
     }
 }));
 
@@ -62,7 +67,7 @@ const NoDRRadio = withStyles({
         },
     },
     checked: {},
-})((props) => <Radio color="default" {...props} />);
+})((props) => <Radio color="default" name="severity" {...props} />);
 const MildDRRadio = withStyles({
     root: {
         color: orange[200],
@@ -71,7 +76,7 @@ const MildDRRadio = withStyles({
         },
     },
     checked: {},
-})((props) => <Radio color="default" {...props} />);
+})((props) => <Radio color="default" name="severity" {...props} />);
 const NonSevereDRRadio = withStyles({
     root: {
         color: orange[500],
@@ -80,7 +85,7 @@ const NonSevereDRRadio = withStyles({
         },
     },
     checked: {},
-})((props) => <Radio color="default" {...props} />);
+})((props) => <Radio color="default" name="severity" {...props} />);
 const AcuteDRRadio = withStyles({
     root: {
         color: orange[800],
@@ -98,12 +103,19 @@ const SevereDRRadio = withStyles({
         },
     },
     checked: {},
-})((props) => <Radio color="default" {...props} />);
+})((props) => <Radio color="default" name="severity" {...props} />);
 export default function NewDiagnosis() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [diagnosis, setDiagnosis] = React.useState({});
     const [selectedValue, setSelectedValue] = React.useState('a');
     const [value, setValue] = React.useState('0');
+    const [comment, setComment] = React.useState('');
+
+    let file = null
+    let doctorId = '5faa5d122de51f1cc15226bf'
+    let patientId = '1234'
+    let diagnosisResult = {}
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -116,6 +128,37 @@ export default function NewDiagnosis() {
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
     };
+
+    const fileChangeHandler = (e) => {
+        file = e.target.files[0]
+    }
+
+    const renderLoadingCover = () => {
+        return !diagnosis.severity ? (
+            <Paper className={classes.loadingCover}></Paper>
+        ) : null
+    }
+
+    const diagnose = () => {
+        apiService.saveDiagnosis(file, doctorId, patientId)
+            .then(resp => {
+                setDiagnosis(resp.data.data)
+                console.log(diagnosis)
+            })
+    }
+
+    const handleEditDiagnosis = () => {
+        apiService.editDiagnosis(diagnosis._id, {
+            patientId: diagnosis.patientId,
+            diagnosisId: diagnosis.diagnosisId,
+            comment: {
+                doctorId: doctorId,
+                severity: selectedValue,
+                comment: comment,
+                timestamp: new Date().getTime()
+            }
+        })
+    }
 
     return (
         <div>
@@ -144,45 +187,55 @@ export default function NewDiagnosis() {
                                     id="contained-button-file"
                                     multiple
                                     type="file"
+                                    onChange={e => fileChangeHandler(e)}
                                 />
                             </Paper>
+                            <Button variant="contained" color="primary" onClick={diagnose}>Diagnose</Button>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            {/* There is already an h1 in the page, let's not duplicate it. */}
-                            <Typography variant="h6" component="h6">
-                                System Diagnosis Prediction
+                            { renderLoadingCover() }
+                                <Typography variant="h6" component="h6">
+                                    System Diagnosis Prediction
+                                 </Typography>
+                                {
+                                    diagnosis.severity ? (
+                                        <div>
+                                            <Alert severity="success">No signs of DR</Alert>
+                                            <p>{diagnosis.severity}</p>
+                                        </div>
+                                    ) : null
+                                }
+                                <br />
+                                <Divider />
+                                <Typography variant="h6" component="h6">
+                                    Doctor's Judgement
                             </Typography>
-                            <Alert severity="success">No signs of DR</Alert>
-                            <br />
-                            <Divider />
-                            <Typography variant="h6" component="h6">
-                                Doctor's Judgement
-                            </Typography>
-                            <div>
-                                <RadioGroup aria-label="severity" name="severity" value={value} onChange={handleChange}>
-                                    <FormControlLabel value="0" control={<NoDRRadio />} label="No DR" />
-                                    <FormControlLabel value="1" control={<MildDRRadio />} label="Mild" />
-                                    <FormControlLabel value="2" control={<NonSevereDRRadio />} label="..." />
-                                    <FormControlLabel value="3" control={<AcuteDRRadio />} label="Acute" />
-                                    <FormControlLabel value="4" control={<SevereDRRadio />} label="Severe" />
-                                </RadioGroup>
-                            </div>
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="Comment"
-                                multiline
-                                rows={4}
-                                defaultValue=""
-                                variant="outlined"
-                            />
-                            <div>
-                                <Button autoFocus color="inherit" onClick={handleClose}>
-                                    cancel
+                                <div>
+                                    <RadioGroup aria-label="severity" name="severity" value={selectedValue} onChange={handleChange}>
+                                        <FormControlLabel value="0" control={<NoDRRadio />} label="No DR" />
+                                        <FormControlLabel value="1" control={<MildDRRadio />} label="Mild" />
+                                        <FormControlLabel value="2" control={<NonSevereDRRadio />} label="..." />
+                                        <FormControlLabel value="3" control={<AcuteDRRadio />} label="Acute" />
+                                        <FormControlLabel value="4" control={<SevereDRRadio />} label="Severe" />
+                                    </RadioGroup>
+                                </div>
+                                <TextField
+                                    id="outlined-multiline-static"
+                                    label="Comment"
+                                    multiline
+                                    rows={4}
+                                    defaultValue=""
+                                    variant="outlined"
+                                    onInput={e => setComment(e.target.value)}
+                                />
+                                <div>
+                                    <Button autoFocus color="inherit" onClick={handleClose}>
+                                        cancel
                                 </Button>
-                                <Button autoFocus variant="contained" color="primary" onClick={handleClose}>
-                                    save
+                                    <Button autoFocus variant="contained" color="primary" onClick={handleEditDiagnosis}>
+                                        save
                                 </Button>
-                            </div>
+                                </div>
                         </Grid>
                     </Grid>
                 </Container>

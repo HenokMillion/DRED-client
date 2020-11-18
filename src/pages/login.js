@@ -21,12 +21,12 @@ class Login extends React.Component {
             loggingIn: false,
             user: { username: '', password: '' }
         }
-        console.log(isAuthenticated(), getAuthUser())
-        useEffect(() => {
-            if (isAuthenticated()) {
-                navigate('/')
-            }
-        })
+    }
+
+    componentDidMount() {
+        if (isAuthenticated()) {
+            navigate('/')
+        }
     }
 
     renderProgress() {
@@ -43,13 +43,10 @@ class Login extends React.Component {
 
     async login(e) {
         e.preventDefault();
-        console.log(this.state.user)
         const loginSuccess = await handleLogin(this.state.user)
         this.setState({ loggingIn: true })
         if (loginSuccess) {
-            useEffect(() => {
-                navigate('/')
-            })
+            navigate('/')
             console.log('LOGIN SUCCESS', loginSuccess)
         } else {
             //
