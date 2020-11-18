@@ -1,8 +1,8 @@
 const path = require('path')
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `Diabetic Retinopathy Early Detection (DRED)`,
+    description: `A tool to detect diabetic retinopathy from retina scan images`,
     author: `@gatsbyjs`,
   },
   plugins: [

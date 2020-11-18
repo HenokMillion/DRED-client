@@ -7,6 +7,12 @@ import Layout from "../components/layout";
 import Image from "../components/image";
 import SEO from "../components/seo";
 import LoginPage from "views/LoginPage/LoginPage";
+import { logout } from '../services/auth'
+
+function __logout() {
+  logout(() => navigate('/login'))
+}
+
 
 const IndexPage = () => (
   <Layout>
@@ -17,9 +23,14 @@ const IndexPage = () => (
     {/* <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
       <Image />
     </div> */}
-    <LoginPage />
+    {/* <LoginPage /> */}
     <Link to="/page-2/">Go to page 2</Link> <br />
     <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
+    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
+      <Image/>
+    </div>
+    <Link to="/login/">Login</Link> <br />
+    <p to="#" onClick={() => __logout()}>Logout</p>
   </Layout>
 );
 
