@@ -104,12 +104,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function PatientForm() {
+export default function PatientForm(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [file, setFile] = React.useState('');
     const [filePath, setFilePath] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+    const [selectedValue, setSelectedValue] = React.useState(null);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -283,7 +284,7 @@ export default function PatientForm() {
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Button color="success">Save</Button>
+                                    <Button color="success" variant="outlined">Save</Button>
                                 </form>
                             </Container>
                         </Grid>
