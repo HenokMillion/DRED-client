@@ -108,6 +108,8 @@ export default function PatientForm() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [file, setFile] = React.useState('');
+    const [patientSex, setpatientSex] = React.useState('');
+    const [patientLName, setpatientLName] = React.useState('');
     const [filePath, setFilePath] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
@@ -120,7 +122,7 @@ export default function PatientForm() {
     };
 
     const handleChange = (event) => {
-        setSelectedValue(event.target.value);
+        setpatientSex(event.target.value);
     };
 
     const fileChangeHandler = (e) => {
@@ -144,7 +146,7 @@ export default function PatientForm() {
                 <CenterFocusStrongOutlinedIcon /> Add Patient
             </Button>
             <Dialog fullWidth="md"
-                maxWidth="lg" open={props.open ? props.open : open} onClose={handleClose} TransitionComponent={Transition}>
+                maxWidth="lg" open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">

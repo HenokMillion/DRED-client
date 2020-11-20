@@ -16,8 +16,8 @@ class PaitentList extends Component {
                 { id: '12312322', paitentId: '1234', patientName: 'Ambachew Demeke', patientAge: 22, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
                 { id: '12312323', paitentId: '1234', patientName: 'Yilqal  Tesema', patientAge: 34, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
                 { id: '123123234', paitentId: '1234', patientName: 'Nakachew  Tamene', patientAge: 56, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
-
-            ]
+            ],
+            selectedPatient: null
         };
         this.handleModalClose = this.handleModalClose.bind(this);
     }
@@ -48,7 +48,22 @@ class PaitentList extends Component {
             { field: 'patientLastDiagnosis', headerName: 'Last Diagnosis', width: 200 },
             { field: 'patientNextAppointement', headerName: 'Appointment', width: 150 },
             { field: 'patientLastStatus', headerName: 'Status', width: 150 },
-            { field: '', width: 100 },
+            {
+                field: '', headerName: 'Action',
+                renderCell: (params) => (
+                    <strong>
+                        <Button
+                            variant="contained"
+                            color="info"
+                            size="sm"
+                            style={{ marginLeft: 16 }}
+                            onClick={(param) => { this.setState({ selectedPatient: params.data }); }}
+                        >
+                            <span className='material-icons'>create</span>
+                        </Button>
+                    </strong>
+                )
+            },
         ];
         const rows = [];
 
@@ -69,7 +84,8 @@ class PaitentList extends Component {
 
         return (
             <>
-                <PatientForm />
+                <PatientForm
+                    /* patient props needs to be given here*/ />
                 <div style={{ height: "75vh", }}>
                     <DataGrid
                         columns={columns}
