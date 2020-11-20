@@ -17,6 +17,14 @@ export const put = async (url, data) => {
     })
 }
 
+export const get = async (url) => {
+    return axios.get(url, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 export const multipartPost = async (url, data) => {
     const formData = new FormData()
     formData.append('image', data.image)

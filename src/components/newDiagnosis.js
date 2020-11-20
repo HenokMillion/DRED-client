@@ -170,7 +170,7 @@ export default function NewDiagnosis() {
     };
 
     const fileChangeHandler = (e) => {
-        if (e.target.files && e.target.files.length > 0) {
+        if (e.target.files && e.target.files.length > 0 && !diagnosing) {
             setFile(e.target.files[0])
             var reader = new FileReader();
             reader.onload = function (_e) {
@@ -232,7 +232,7 @@ export default function NewDiagnosis() {
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+                        <IconButton disabled={diagnosing} edge="start" color="inherit" onClick={handleClose} aria-label="close">
                             <CloseIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>

@@ -39,8 +39,8 @@ export default function IndexPage() {
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
         <Image />
       </div>
-      <NewDiagnosis />
       <Link to="/login/">Login</Link> <br />
+      <Link to="/patient/">Patient</Link> <br />
 
       <p to="#" onClick={(e) => __logout(e)}>Logout</p>
     </Layout>
