@@ -172,8 +172,8 @@ export default function PatientPage(props) {
                             </div>
                             <div className={classes.row}>
                                 {
-                                    diagnoses.map(diagnosis => (
-                                        <DiagnosisCard key={diagnosis} />
+                                    patientData.diagnoses.map(diagnosis => (
+                                        <DiagnosisCard key={diagnosis} diagnosis={diagnosis} />
                                     ))
                                 }
                             </div>

@@ -17,7 +17,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
-export default function DiagnosisCard() {
+export default function DiagnosisCard({ diagnosis }) {
+    console.log('DIAGNOSIS: ', diagnosis)
     const useStyles = makeStyles((theme) => ({
         root: {
             maxWidth: 345,
@@ -62,14 +63,14 @@ export default function DiagnosisCard() {
                         title="Contemplative Reptile"
                     />
                     <CardContent>
-                        <p><b>Doctor's Comment:</b> test doctor's comment</p>
+    <p><b>Doctor's Comment:</b> { diagnosis.comment ? diagnosis.comment[0].comment : '' }</p>
                         <div>
                             <div className={classes.row}>
                                 <p></p>
                                 <p>Dr. A</p>
                             </div>
                             <div className={classes.row}>
-                                <p>May 10 2019</p>
+                                <p>{ diagnosis.diagnosis_date }</p>
                                 <p>-</p>
                             </div>
                         </div>
