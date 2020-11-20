@@ -3,6 +3,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button } from '@material-ui/core';
+import PatientForm from './patientForm';
 
 
 class PaitentList extends Component {
@@ -68,27 +69,12 @@ class PaitentList extends Component {
 
         return (
             <>
-                <Button onClick={this.handleModalClose} style={{ right: 0, position: "static" }} color="primary" >
-                    Add Patient
-                </Button>
+                <PatientForm />
                 <div style={{ height: "75vh", }}>
                     <DataGrid
                         columns={columns}
                         rows={this.state.paitents} />
                 </div>
-                <Modal
-                    open={this.state.isModalOpen}
-                    onClose={this.handleModalClose}
-                    style={useStyles}
-                >
-                    <div>
-                        <h2 id="simple-modal-title">Text in a modal</h2>
-                        <p id="simple-modal-description">
-                            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                         </p>
-                    </div>
-                </Modal>
-
             </>
         );
     }
