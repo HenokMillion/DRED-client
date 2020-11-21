@@ -31,6 +31,7 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import PaitentList from './paitentList';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -106,8 +107,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function PatientForm(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    let { open, setOpen, handleModalClose, showAddBtn } = props;
     const [file, setFile] = React.useState('');
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    // const { selectedPatient } = React.useContext(PaitentList)
+    const { selectedPatient } = props
+    console.log('PROPS: ', props)
     const [patientSex, setpatientSex] = React.useState('');
     const [patientLName, setpatientLName] = React.useState('');
     const [filePath, setFilePath] = React.useState('');
@@ -115,11 +120,11 @@ export default function PatientForm(props) {
     const [selectedValue, setSelectedValue] = React.useState(null);
 
     const handleClickOpen = () => {
-        setOpen(true);
+        handleModalClose()
     };
 
     const handleClose = () => {
-        setOpen(false);
+        handleModalClose()
     };
 
     const handleChange = (event) => {
@@ -143,9 +148,12 @@ export default function PatientForm(props) {
     };
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                <CenterFocusStrongOutlinedIcon /> Add Patient
-            </Button>
+            {
+                showAddBtn &&
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                    <CenterFocusStrongOutlinedIcon /> Add Patient
+                </Button>
+            }
             <Dialog fullWidth="md"
                 maxWidth="lg" open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
@@ -194,7 +202,7 @@ export default function PatientForm(props) {
                         <Grid container xs={12} sm={9} className={classes.doctorArea}>
                             <Container>
                                 <form className={classes.root} noValidate autoComplete="off">
-                                    <Grid container spacing={6}>
+                                    <Grid container spacing={6} xs={12}>
                                         <Grid xs={12} sm={12} >
                                             <h1>Patient Vital Information</h1>
                                         </Grid>
@@ -204,6 +212,7 @@ export default function PatientForm(props) {
                                                 id="patientFirstName"
                                                 label="First Name"
                                                 helperText="e.g. Abebe"
+                                                defaultValue={selectedPatient ? selectedPatient.patientName.split(' ')[0] : ''}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -212,6 +221,7 @@ export default function PatientForm(props) {
                                                 id="patientLastName"
                                                 label="Last Name"
                                                 helperText="e.g. Kebede"
+                                                defaultValue={selectedPatient ? selectedPatient.patientName.split(' ')[1] : ''}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -222,9 +232,10 @@ export default function PatientForm(props) {
                                                 label="Sex"
                                                 onChange={handleChange}
                                                 helperText="Please select your sex"
+                                                defaultValue={selectedPatient ? selectedPatient.patientSex : ''}
                                             >
-                                                <MenuItem key="Male" value="male">Male</MenuItem>
-                                                <MenuItem key="Female" value="female">Female</MenuItem>
+                                                <MenuItem selected={selectedPatient ? selectedPatient.patientSex === 'male' ? true : false : false} key="Male" value="male">Male</MenuItem>
+                                                <MenuItem selected={selectedPatient ? selectedPatient.patientSex === 'female' ? true : false : false} key="Female" value="female">Female</MenuItem>
                                             </TextField>
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -270,11 +281,12 @@ export default function PatientForm(props) {
                                                 fullWidth
                                                 id="patientID"
                                                 label="PatientID"
-                                                value={'PT'.concat(Date.now().toString())}
+                                                value={selectedPatient ? selectedPatient.paitentId : 'PT'.concat(Date.now().toString())}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                                 helperText="e.g. PT123123"
+                                                defaultValue={selectedPatient ? selectedPatient.paitentId : ''}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -286,7 +298,11 @@ export default function PatientForm(props) {
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Button color="success" variant="outlined">Save</Button>
+                                    <Grid container xs={12} justify="flex-end">
+                                        <Grid item xs={12}>
+                                            <Button variant="contained" color="primary">Save</Button>
+                                        </Grid>
+                                    </Grid>
                                 </form>
                             </Container>
                         </Grid>

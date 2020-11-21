@@ -1,4 +1,5 @@
-const GATEWAY = 'http://localhost:3000/api/v1/'
+export const DOMAIN = 'http://localhost:3000/'
+const GATEWAY = DOMAIN+'api/v1/'
 export const routes = {
     SAVE_DIAGNOSIS: GATEWAY + 'diagnosis/new/',
     EDIT_DIAGNOSIS: GATEWAY + 'diagnosis/edit/',

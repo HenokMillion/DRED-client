@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button } from '@material-ui/core';
 import PatientForm from './patientForm';
-
+import { navigate } from "gatsby"
 
 class PaitentList extends Component {
     constructor(props) {
@@ -14,8 +14,8 @@ class PaitentList extends Component {
             paitents: [
                 { id: '12312321', paitentId: '1234', patientName: 'Aschalew Tamene', patientAge: 45, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
                 { id: '12312322', paitentId: '1234', patientName: 'Ambachew Demeke', patientAge: 22, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
-                { id: '12312323', paitentId: '1234', patientName: 'Yilqal  Tesema', patientAge: 34, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
-                { id: '123123234', paitentId: '1234', patientName: 'Nakachew  Tamene', patientAge: 56, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
+                { id: '12312323', paitentId: '1234', patientName: 'Yilqal Tesema', patientAge: 34, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
+                { id: '123123234', paitentId: '1234', patientName: 'Nakachew Tamene', patientAge: 56, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
             ],
             selectedPatient: null
         };
@@ -24,6 +24,7 @@ class PaitentList extends Component {
 
     handleModalClose() {
         this.setState((prevState) => ({
+            selectedPatient: null,
             isModalOpen: !prevState.isModalOpen
         }));
     }
@@ -31,12 +32,15 @@ class PaitentList extends Component {
     getModalStyle() {
         const top = 50;
         const left = 50;
-
         return {
             top: `${top}%`,
             left: `${left}%`,
             transform: `translate(-${top}%, -${left}%)`,
         };
+    }
+
+    setOpen(boolean) {
+        this.setState({ isModalOpen: boolean })
     }
 
     render() {
@@ -57,9 +61,9 @@ class PaitentList extends Component {
                             color="info"
                             size="sm"
                             style={{ marginLeft: 16 }}
-                            onClick={(param) => { this.setState({ selectedPatient: params.data }); }}
+                            onClick={(param) => { this.setState({ selectedPatient: params.data }); this.setOpen(true) }}
                         >
-                            <span className='material-icons'>create</span>
+                            <span className='material-icons'>EDIT</span>
                         </Button>
                     </strong>
                 )
@@ -85,9 +89,21 @@ class PaitentList extends Component {
         return (
             <>
                 <PatientForm
+                    showAddBtn={true}
+                    open={this.state.isModalOpen}
+                    setOpen={this.setOpen}
+                    selectedPatient={this.state.selectedPatient}
+                    handleModalClose={this.handleModalClose}
                     /* patient props needs to be given here*/ />
                 <div style={{ height: "75vh", }}>
                     <DataGrid
+                        onRowClick={e => {
+                            setTimeout(() => {
+                                if (!this.state.isModalOpen) {
+                                    navigate('/patient/' + e.data.paitentId)
+                                }
+                            }, 200)
+                        }}
                         columns={columns}
                         rows={this.state.paitents} />
                 </div>

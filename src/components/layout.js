@@ -13,7 +13,7 @@ import Header from "./header"
 import ResponsiveHeader from "./sidenav"
 import "./layout.css"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, logout }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
     <>
 
       {/* <main>{children}</main> */}
-      <ResponsiveHeader children={children} title={data.site.siteMetadata?.title || `Title`} />
+      <ResponsiveHeader logout={logout} children={children} title={data.site.siteMetadata?.title || `Title`} />
     </>
   )
 }

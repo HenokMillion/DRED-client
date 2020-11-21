@@ -26,6 +26,8 @@ import CenterFocusStrongOutlinedIcon from '@material-ui/icons/CenterFocusStrongO
 import * as apiService from '../services/api.service';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import clsx from 'clsx'
+import { CheckCircleOutline } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -90,6 +92,26 @@ const useStyles = makeStyles((theme) => ({
         bottom: '10px',
         backgroundColor: 'white',
         borderRadius: '50%'
+    },
+    dialogActions: {
+        paddingBottom: 21,
+        paddingTop: 12
+    },
+    rightActionBtnContainer: {
+        marginLeft: 21
+    },
+    buttonProgress: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+    buttonSuccess: {
+        backgroundColor: green[500],
+        '&:hover': {
+            backgroundColor: green[700],
+        },
     }
 }));
 
@@ -152,6 +174,13 @@ export default function NewDiagnosis() {
     const [file, setFile] = React.useState('');
     const [filePath, setFilePath] = React.useState('');
     const [diagnosing, setDiagnosing] = React.useState(false);
+    const [editingDiagnosis, setEditingDiagnosis] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [diagnosisSuccess, setDiagnosisSuccess] = React.useState(false);
+
+    const buttonClassname = clsx({
+        [classes.buttonSuccess]: success,
+    });
 
     let doctorId = '5faa5d122de51f1cc15226bf'
     let patientId = '1234'
@@ -206,22 +235,32 @@ export default function NewDiagnosis() {
             apiService.saveDiagnosis(file, doctorId, patientId)
                 .then(resp => {
                     setDiagnosis(resp.data.data)
+                    setDiagnosisSuccess(true)
                 })
-                .finally(() => setDiagnosing(false))
+                .finally(() => {
+                    setDiagnosing(false)
+                })
         }, 3000)
     }
 
     const handleEditDiagnosis = () => {
-        apiService.editDiagnosis(diagnosis._id, {
-            patientId: diagnosis.patientId,
-            diagnosisId: diagnosis.diagnosisId,
-            comment: {
-                doctorId: doctorId,
-                severity: selectedValue,
-                comment: comment,
-                timestamp: new Date().getTime()
-            }
-        })
+        setEditingDiagnosis(true)
+        setTimeout(() => {
+            apiService.editDiagnosis(diagnosis._id, {
+                patientId: diagnosis.patientId,
+                diagnosisId: diagnosis.diagnosisId,
+                comment: {
+                    doctorId: doctorId,
+                    severity: selectedValue,
+                    comment: comment,
+                    timestamp: new Date().getTime()
+                }
+            })
+                .then(resp => {
+                    setSuccess(true)
+                })
+                .finally(() => setEditingDiagnosis(false))
+        }, 3000)
     }
 
     return (
@@ -229,7 +268,7 @@ export default function NewDiagnosis() {
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 <CenterFocusStrongOutlinedIcon /> New Diagnosis
       </Button>
-            <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+            <Dialog fullWidth="md" maxWidth="lg" open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
                         <IconButton disabled={diagnosing} edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -277,7 +316,7 @@ export default function NewDiagnosis() {
                         <Grid item xs={12} sm={8} className={classes.doctorArea}>
                             {renderNoDiagnosis()}
                             <Container>
-                                <Typography variant="h6" component="h6">
+                                <Typography variant="subtitle1" component="subtitle1">
                                     System Diagnosis Prediction
                                  </Typography>
                                 {
@@ -290,35 +329,54 @@ export default function NewDiagnosis() {
                                 }
                                 <br />
                                 <Divider />
-                                <Typography variant="h6" component="h6">
+                                <Typography variant="subtitle1" component="subtitle1">
                                     Doctor's Judgement
                             </Typography>
-                                <div>
-                                    <RadioGroup aria-label="severity" name="severity" value={selectedValue} onChange={handleChange}>
-                                        <FormControlLabel value="0" control={<NoDRRadio />} label="No DR" />
-                                        <FormControlLabel value="1" control={<MildDRRadio />} label="Mild" />
-                                        <FormControlLabel value="2" control={<NonSevereDRRadio />} label="..." />
-                                        <FormControlLabel value="3" control={<AcuteDRRadio />} label="Acute" />
-                                        <FormControlLabel value="4" control={<SevereDRRadio />} label="Severe" />
-                                    </RadioGroup>
-                                </div>
-                                <TextField
-                                    id="outlined-multiline-static"
-                                    label="Comment"
-                                    multiline
-                                    rows={4}
-                                    defaultValue=""
-                                    variant="outlined"
-                                    onInput={e => setComment(e.target.value)}
-                                />
-                                <div>
-                                    <Button autoFocus color="inherit" onClick={handleClose}>
-                                        cancel
-                                </Button>
-                                    <Button disabled={!diagnosis.severity} autoFocus variant="contained" color="primary" onClick={handleEditDiagnosis}>
-                                        save
-                                </Button>
-                                </div>
+                                <Grid container>
+                                    <Grid item xs={4}>
+                                        <div>
+                                            <RadioGroup aria-label="severity" name="severity" value={selectedValue} onChange={handleChange}>
+                                                <FormControlLabel value="0" control={<NoDRRadio />} label="No DR" />
+                                                <FormControlLabel value="1" control={<MildDRRadio />} label="Mild" />
+                                                <FormControlLabel value="2" control={<NonSevereDRRadio />} label="..." />
+                                                <FormControlLabel value="3" control={<AcuteDRRadio />} label="Acute" />
+                                                <FormControlLabel value="4" control={<SevereDRRadio />} label="Severe" />
+                                            </RadioGroup>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <TextField
+                                            id="outlined-multiline-static"
+                                            label="Comment"
+                                            multiline
+                                            fullWidth
+                                            rows={4}
+                                            defaultValue=""
+                                            variant="outlined"
+                                            onInput={e => setComment(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid container justify="flex-end" xs={12} className={classes.dialogActions}>
+                                        <Button autoFocus color="inherit" onClick={handleClose}>
+                                            cancel
+                                            </Button>
+                                        {/* <Button className={classes.rightActionBtn} disabled={!diagnosis.severity} autoFocus variant="contained" color="primary" onClick={handleEditDiagnosis}>
+                                            save
+                                            </Button> */}
+                                        <div className={classes.rightActionBtnContainer}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                disabled={editingDiagnosis}
+                                                onClick={handleEditDiagnosis}
+                                            >
+                                                save
+                                            {editingDiagnosis && <CircularProgress size={24} className={classes.buttonProgress} />}
+
+                                            </Button>
+                                        </div>
+                                    </Grid>
+                                </Grid>
                             </Container>
                         </Grid>
                     </Grid>

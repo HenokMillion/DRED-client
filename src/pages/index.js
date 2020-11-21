@@ -11,7 +11,7 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 
 export default function IndexPage() {
-  let __logout = () => { }
+  let __logout = (e) => { }
   useEffect(() => {
     __logout = (e) => {
       logout(() => navigate('/login'))
@@ -32,7 +32,7 @@ export default function IndexPage() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Layout>
+    <Layout logout={__logout}>
       <SEO title="Home" />
       {/* <h1>Hi people</h1>
       <p>Welcome to your new Gatsby site.</p>
@@ -41,11 +41,11 @@ export default function IndexPage() {
         <Image />
       </div> */}
       
-      <NewDiagnosis />
+      {/* <NewDiagnosis />
       <Link to="/login/">Login</Link> <br />
       <Link to="/patient/">Patient</Link> <br />
 
-      <p to="#" onClick={(e) => __logout(e)}>Logout</p>
+      <p to="#" onClick={(e) => __logout(e)}>Logout</p> */}
       <PaitentList />
     </Layout>
   )

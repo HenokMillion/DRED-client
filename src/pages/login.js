@@ -43,8 +43,8 @@ class Login extends React.Component {
 
     async login(e) {
         e.preventDefault();
-        const loginSuccess = await handleLogin(this.state.user)
         this.setState({ loggingIn: true })
+        const loginSuccess = await handleLogin(this.state.user)
         if (loginSuccess) {
             navigate('/')
             console.log('LOGIN SUCCESS', loginSuccess)
@@ -59,32 +59,39 @@ class Login extends React.Component {
         return (
             <Container style={{ display: 'flex', justifyContent: "center", alignItems: "center", backgroundColor: '#E4DFED', width: '100vw', height: '100vh', margin: '0', maxWidth: 'unset' }}>
                 {/* <Image type="left" /> */}
-                <Paper style={{ width: '60vw', height: '80vh', position: 'relative' }}>
+                <Paper style={{ width: '60vw', position: 'relative' }}>
                     {this.renderProgress()}
-                    <Container>
+                    <Container style={{padding: '64px 30px'}}>
                         <SEO title="Login" />
                         <Grid container spacing={1} item>
                             <Grid item lg={6}>
+                                {/* <Image type="loginimg" /> */}
                             </Grid>
-                            <Grid item lg={6} style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                            <Grid container justify="center" lg={6} style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                                 <h1>Login</h1>
-                                <Grid item container>
-                                    <Image type="loginimg" />
+                                <Grid item>
                                 </Grid>
                                 <form onSubmit={e => this.login(e)}>
-                                    <Grid item container>
-                                        <TextField disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: e.target.value, password: this.state.user.password } })} id="username" label="Username" variant="outlined" />
+                                    <Grid container spacing={3} xs={12} justify="center">
+                                        <Grid item xs={7}>
+                                            <TextField fullWidth disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: e.target.value, password: this.state.user.password } })} id="username" label="Username" variant="outlined" />
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <TextField fullWidth disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: this.state.user.username, password: e.target.value } })} id="password" label="Password" type="password" variant="outlined" />
+                                        </Grid>
                                     </Grid>
-                                    <Grid item container>
-                                        <TextField disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: this.state.user.username, password: e.target.value } })} id="password" label="Password" type="password" variant="outlined" />
-                                    </Grid>
-                                    <Grid item container>
-                                        <Link to="#">Forgot Password?</Link>
-                                    </Grid>
-                                    <Grid item container>
-                                        <Button type="submit" disabled={this.state.loggingIn} variant="contained" color="primary">
-                                            SIGN IN
-                                        </Button>
+                                    <Grid container spacing={3} xs={12} justify="center">
+                                        <Grid item xs={7}>
+                                            <Button fullWidth type="submit"
+                                                disabled={this.state.loggingIn}
+                                                variant="contained" color="primary"
+                                                style={{ marginBottom: 10 }}>
+                                                SIGN IN
+                                            </Button>
+                                            <Grid item xs={12} justify="flex-end" >
+                                                <Link to="#">Forgot Password?</Link>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                 </form>
                             </Grid>
