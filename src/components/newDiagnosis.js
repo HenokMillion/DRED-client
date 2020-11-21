@@ -164,7 +164,8 @@ const SevereDRRadio = withStyles({
     },
     checked: {},
 })((props) => <Radio color="default" name="severity" {...props} />);
-export default function NewDiagnosis() {
+export default function NewDiagnosis(props) {
+    const { handleClosingTasks } = props
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [diagnosis, setDiagnosis] = React.useState({});
@@ -187,11 +188,19 @@ export default function NewDiagnosis() {
     let diagnosisResult = {}
 
     const handleClickOpen = () => {
+        setDiagnosis({})
+        setSelectedValue('a')
+        setComment('')
+        setFilePath('')
+        // setDiagnosis(false)
+        // setEditingDiagnosis(false)
+        setDiagnosisSuccess(false)
         setOpen(true);
     };
 
     const handleClose = () => {
         setOpen(false);
+        handleClosingTasks()
     };
 
     const handleChange = (event) => {
@@ -258,6 +267,7 @@ export default function NewDiagnosis() {
             })
                 .then(resp => {
                     setSuccess(true)
+                    setTimeout(() => handleClose(), 2000)
                 })
                 .finally(() => setEditingDiagnosis(false))
         }, 3000)
@@ -356,6 +366,14 @@ export default function NewDiagnosis() {
                                             onInput={e => setComment(e.target.value)}
                                         />
                                     </Grid>
+                                    <Grid container justify="flex-end" xs={12}>
+                                        <Grid item>
+                                            {success &&
+                                                <Alert variant="filled" severity="success">
+                                                    Diagnosis saved successfully
+                                                </Alert>}
+                                        </Grid>
+                                    </Grid>
                                     <Grid container justify="flex-end" xs={12} className={classes.dialogActions}>
                                         <Button autoFocus color="inherit" onClick={handleClose}>
                                             cancel
@@ -372,7 +390,6 @@ export default function NewDiagnosis() {
                                             >
                                                 save
                                             {editingDiagnosis && <CircularProgress size={24} className={classes.buttonProgress} />}
-
                                             </Button>
                                         </div>
                                     </Grid>

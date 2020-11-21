@@ -107,6 +107,12 @@ export default function PatientPage(props) {
     };
 
     const handleClose = () => {
+        setPatientData(null)
+        fetchPatientDataById(params.id)
+            .then(data => {
+                setPatientData(data)
+            })
+            .catch(err => console.error('ERR: ', err))
         setOpen(false);
     };
 
@@ -148,7 +154,7 @@ export default function PatientPage(props) {
                                     <AccountCircleIcon />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Typography variant="body2">{patientData.firstName} {patientData.lastName}</Typography>
+                                    <Typography variant="body1">{patientData.firstName} {patientData.lastName}</Typography>
                                 </Grid>
                             </Grid>
                             <Grid container>
@@ -215,7 +221,7 @@ export default function PatientPage(props) {
                                     <Grid item><Typography variant="body2">Last Diagnosed</Typography></Grid>
                                     <Grid item><Typography variant="body2"><b>{patientData.diagnoses ?
                                         patientData.diagnoses[patientData.diagnoses.length - 1] ?
-                                        formatDate(patientData.diagnoses[patientData.diagnoses.length - 1].diagnosis_date) : '-' : '-'}</b></Typography>
+                                            formatDate(patientData.diagnoses[patientData.diagnoses.length - 1].diagnosis_date) : '-' : '-'}</b></Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container justify="space-between">
@@ -242,7 +248,7 @@ export default function PatientPage(props) {
                             <Paper elevation={2}>
                                 <div className={classes.diagnosesContainer}>
                                     <Typography variant='h6'>Diagnoses</Typography>
-                                    <NewDiagnosis />
+                                    <NewDiagnosis handleClosingTasks={handleClose} />
                                 </div>
                                 <div className={classes.row}>
                                     {
