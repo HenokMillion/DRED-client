@@ -1,3 +1,4 @@
+const path = require('path')
 module.exports = {
   siteMetadata: {
     title: `Diabetic Retinopathy Early Detection (DRED)`,
@@ -6,6 +7,15 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
+    {
+      resolve: `gatsby-plugin-root-import`,
+      options: {
+        root: path.join(__dirname, 'src'),
+        views: path.join(__dirname, 'src/views'),
+        components: path.join(__dirname, 'src/components'),
+        assets: path.join(__dirname, 'src/assets'),
+      }
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -31,4 +41,4 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
   ],
-}
+};
