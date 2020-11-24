@@ -1,9 +1,12 @@
 import React, { useEffect } from "react"
 import { Link, navigate } from "gatsby"
 
-import Layout from "../components/layout"
-import { Image } from "../components/image"
-import SEO from "../components/seo"
+// import "assets/scss/material-kit-react.scss";
+
+import Layout from "../components/layout";
+import Image from "../components/image";
+import SEO from "../components/seo";
+import LoginPage from "./views/LoginPage/LoginPage";
 import { logout } from '../services/auth'
 import NewDiagnosis from '../components/newDiagnosis'
 import PaitentList from '../components/paitentList'
