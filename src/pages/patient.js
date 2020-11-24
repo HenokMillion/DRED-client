@@ -14,7 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Typography } from "@material-ui/core";
+import { Divider, Grid, Typography } from "@material-ui/core";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -24,6 +24,8 @@ import DiagnosisCard from '../components/diagnosisCard';
 import { match } from '@reach/router/lib/utils';
 import { fetchPatientDataById } from '../services/api.service'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { formatDate } from '../utils/time.util'
+import PatientForm from "../components/patientForm";
 
 const extractPageMatchParams = (props) => {
     if (props.pageContext.matchPath) {
@@ -41,7 +43,8 @@ export default function PatientPage(props) {
     const useStyles = makeStyles((theme) => ({
         layout: {
             display: 'flex',
-            flexDirection: 'row'
+            flexDirection: 'row',
+            fontFamily: ''
         },
         root: {
             maxWidth: 345,
@@ -56,7 +59,36 @@ export default function PatientPage(props) {
         diagnosesContainer: {
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            padding: '12px'
+        },
+        centeredFlexCol: {
+            display: 'flex',
+            flexDirection: 'col',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center'
+        },
+        patientDetailContainer: {
+            padding: '12px',
+            marginRight: '12px'
+        },
+        spaced: {
+            paddingRight: '10%',
+        },
+        subtitle: {
+            color: 'blue',
+            margin: '10px 0'
+        },
+        divider: {
+            margin: '15px 0 5px 0'
+        },
+        actionsContainer: {
+            marginTop: 40
+        },
+        historyContainer: {
+            marginTop: 40,
+            padding: '12px'
         }
     }))
 
@@ -75,15 +107,31 @@ export default function PatientPage(props) {
     };
 
     const handleClose = () => {
+        setPatientData(null)
+        fetchPatientDataById(params.id)
+            .then(data => {
+                setPatientData(data)
+            })
+            .catch(err => console.error('ERR: ', err))
         setOpen(false);
     };
+
+    const handleEditClose = () => {
+        setOpenEdit(!openEdit)
+    }
 
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
     });
 
     const [open, setOpen] = React.useState(false);
+    const [openEdit, setOpenEdit] = React.useState(false);
     const [patientData, setPatientData] = React.useState(null);
+
+
+    const formatDate = (date) => {
+
+    }
 
     useEffect(() => {
         if (patientData === null) {
@@ -98,91 +146,136 @@ export default function PatientPage(props) {
     return (
         <Layout>
             {patientData ?
-                <div className={classes.layout}>
-                    <Paper elevation={2}>
-                        <div>
-                            <AccountCircleIcon />
-                            <p>{patientData.firstName} {patientData.lastName}</p>
-                        </div>
-                        <div>
-                            <p>information</p>
-                            <div className={classes.layout}>
-                                <div>
-                                    <p>Age</p>
-                                    <p>Gender</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                    <p>Address</p>
-                                </div>
-                                <div>
-                                    <p>{patientData.birthDate}</p>
-                                    <p>{patientData.sex ? patientData.sex : 'Male'}</p>
-                                    <p>{patientData.phone}</p>
-                                    <p>{patientData.email}</p>
-                                    <p>{patientData.address}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p>Medical Record</p>
-                            <div className={classes.layout}>
-                                <div>
-                                    <p>File Number</p>
-                                    <p>Patient ID</p>
-                                    <p>DR Status</p>
-                                </div>
-                                <div>
-                                    <p>{patientData.fileNumber}</p>
-                                    <p>{patientData.patientId}</p>
-                                    <p>{
-                                    patientData.diagnoses ?
-                                        patientData.diagnoses[patientData.diagnoses.length - 1].comment ?
-                                        patientData.diagnoses[patientData.diagnoses.length - 1].comment[0].severity 
-                                    : '-' : '-'}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p>Appointment</p>
-                            <div>
-                                <p>Last Diagnosed</p>
-                                <p>Next Appointment</p>
-                            </div>
-                            <div>
-                                <p>{ patientData.diagnoses ?
-                                    patientData.diagnoses[patientData.diagnoses.length - 1].diagnosis_date : '-' }</p>
-                                <p>Nov 13 2021</p>
-                            </div>
-                        </div>
-                        <div>
-                            <IconButton aria-label="delete">
-                                <EditIcon /> Edit Record
-                        </IconButton>
-                            <IconButton aria-label="delete" color='secondary'>
-                                <DeleteIcon /> Delete Record
-                        </IconButton>
-                        </div>
-                    </Paper>
-                    <div>
-                        <Paper elevation={2}>
-                            <div className={classes.diagnosesContainer}>
-                                <Typography variant='h6'>Diagnoses</Typography>
-                                <NewDiagnosis />
-                            </div>
-                            <div className={classes.row}>
-                                {
-                                    diagnoses.map(diagnosis => (
-                                        <DiagnosisCard key={diagnosis} />
-                                    ))
-                                }
-                            </div>
+                <Grid container xs={12} className={classes.layout}>
+                    <Grid item xs={3}>
+                        <Paper elevation={2} className={classes.patientDetailContainer}>
+                            <Grid container xs={12} className={classes.centeredFlexCol}>
+                                <Grid item xs={12}>
+                                    <AccountCircleIcon />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="body1">{patientData.firstName} {patientData.lastName}</Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle2" className={classes.subtitle}>information</Typography>
+                                </Grid>
+                                <Grid container className={classes.layout}>
+                                    <Grid container justify="space-between">
+                                        <Grid item><Typography variant="body2">Age</Typography></Grid>
+                                        <Grid item><Typography variant="body2"><b>{patientData.birthDate}</b></Typography></Grid>
+                                    </Grid>
+                                    <Grid container justify="space-between">
+                                        <Grid item><Typography variant="body2">Gender</Typography></Grid>
+                                        <Grid item><Typography variant="body2"><b>{patientData.sex ? patientData.sex : 'Male'}</b></Typography></Grid>
+                                    </Grid>
+                                    <Grid container justify="space-between">
+                                        <Grid item><Typography variant="body2">Phone</Typography></Grid>
+                                        <Grid item><Typography variant="body2"><b>{patientData.phone}</b></Typography></Grid>
+                                    </Grid>
+                                    <Grid container justify="space-between">
+                                        <Grid item><Typography variant="body2">Email</Typography></Grid>
+                                        <Grid item><Typography variant="body2"><b>{patientData.email}</b></Typography></Grid>
+                                    </Grid>
+                                    <Grid container justify="space-between">
+                                        <Grid item><Typography variant="body2">Address</Typography></Grid>
+                                        <Grid item><Typography variant="body2"><b>{patientData.address}</b></Typography></Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Divider className={classes.divider} />
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle2" className={classes.subtitle}>Medical Record</Typography>
+                                </Grid>
+                                <Grid container className={classes.layout}>
+                                    <Grid container>
+                                        <Grid container justify="space-between">
+                                            <Grid item><Typography variant="body2">File Number</Typography></Grid>
+                                            <Grid item><Typography variant="body2"><b>{patientData.fileNumber}</b></Typography></Grid>
+                                        </Grid>
+                                        <Grid container justify="space-between">
+                                            <Grid item><Typography variant="body2">Patient ID</Typography></Grid>
+                                            <Grid item><Typography variant="body2"><b>{patientData.patientId}</b></Typography></Grid>
+                                        </Grid>
+                                        <Grid container justify="space-between">
+                                            <Grid item><Typography variant="body2">DR Status</Typography></Grid>
+                                            <Grid item><Typography variant="body2"><b>{
+                                                patientData.diagnoses ?
+                                                    patientData.diagnoses[patientData.diagnoses.length - 1] ?
+                                                        patientData.diagnoses[patientData.diagnoses.length - 1].comment ?
+                                                        patientData.diagnoses[patientData.diagnoses.length - 1].comment[0] ?
+                                                            patientData.diagnoses[patientData.diagnoses.length - 1].comment[0].severity
+                                                            : '-' : '-' : '-' : '-'}</b>
+                                            </Typography></Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Divider className={classes.divider} />
+                            <Grid container>
+                                <Grid container>
+                                    <Typography variant="subtitle2" className={classes.subtitle}>Appointment</Typography>
+                                </Grid>
+                                <Grid container justify="space-between">
+                                    <Grid item><Typography variant="body2">Last Diagnosed</Typography></Grid>
+                                    <Grid item><Typography variant="body2"><b>{patientData.diagnoses ?
+                                        patientData.diagnoses[patientData.diagnoses.length - 1] ?
+                                            formatDate(patientData.diagnoses[patientData.diagnoses.length - 1].diagnosis_date) : '-' : '-'}</b></Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid container justify="space-between">
+                                    <Grid item><Typography variant="body2">Next Appointment</Typography></Grid>
+                                    <Grid item><Typography variant="body2"><b>Nov 13 2021</b></Typography></Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid container className={classes.actionsContainer} justify="flex-end">
+                                <Grid item>
+                                    <Button aria-label="delete" onClick={handleEditClose}>
+                                        <EditIcon /> Edit Record
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button aria-label="delete" color='secondary'>
+                                        <DeleteIcon /> Delete Record
+                                    </Button>
+                                </Grid>
+                            </Grid>
                         </Paper>
-                        <Paper elevation={2}>
-                            <Typography variant='h6'>History</Typography>
-                        </Paper>
-                    </div>
-                </div>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <div>
+                            <Paper elevation={2}>
+                                <div className={classes.diagnosesContainer}>
+                                    <Typography variant='h6'>Diagnoses</Typography>
+                                    <NewDiagnosis handleClosingTasks={handleClose} />
+                                </div>
+                                <div className={classes.row}>
+                                    {
+                                        patientData.diagnoses.map(diagnosis => (
+                                            <DiagnosisCard key={diagnosis} diagnosis={diagnosis} />
+                                        ))
+                                    }
+                                </div>
+                            </Paper>
+                            <Paper elevation={2} className={classes.historyContainer}>
+                                <Typography variant='h6'>History</Typography>
+                            </Paper>
+                        </div>
+                    </Grid>
+                    {
+                        openEdit && <PatientForm
+                            open={openEdit}
+                            setOpen={setOpenEdit}
+                            showAddBtn={false}
+                            selectedPatient={
+                                { id: '12312321', paitentId: '1234', patientName: 'Aschalew Tamene', patientAge: 45, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() }
+                            }
+                            handleModalClose={handleEditClose} />
+                    }
+                </Grid>
                 : <CircularProgress />}</Layout>
     )
+
 }

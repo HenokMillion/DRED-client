@@ -1,5 +1,5 @@
 import { post, multipartPost, put, get } from './http'
-import { routes } from './api.config'
+import { routes } from '../config/api.config'
 
 export const saveDiagnosis = (file, doctorId, patientId) => {
     return multipartPost(routes.SAVE_DIAGNOSIS, {

@@ -10,17 +10,21 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import { formatDate } from '../utils/time.util'
+import { DOMAIN } from '../config/api.config'
 
-export default function DiagnosisCard() {
+export default function DiagnosisCard({ diagnosis }) {
+    console.log('DIAGNOSIS: ', diagnosis)
     const useStyles = makeStyles((theme) => ({
         root: {
-            maxWidth: 345,
+            maxWidth: 200,
+            margin: 10
         },
         media: {
             height: 140,
@@ -29,6 +33,12 @@ export default function DiagnosisCard() {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between'
+        },
+        severity: {
+            width: 40,
+            height: 12,
+            backgroundColor: 'green',
+            borderRadius: '3px'
         }
     }))
 
@@ -54,27 +64,27 @@ export default function DiagnosisCard() {
     const [open, setOpen] = React.useState(false);
 
     return (
-            <Card className={classes.root}>
-                <CardActionArea>
-                    <CardMedia
-                        className={classes.media}
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                        <p><b>Doctor's Comment:</b> test doctor's comment</p>
-                        <div>
-                            <div className={classes.row}>
-                                <p></p>
-                                <p>Dr. A</p>
-                            </div>
-                            <div className={classes.row}>
-                                <p>May 10 2019</p>
-                                <p>-</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
+        <Card className={classes.root}>
+            <CardActionArea>
+                <CardMedia
+                    className={classes.media}
+                    image={DOMAIN+diagnosis.imagePath.replace('uploads/','')}
+                    title="Contemplative Reptile"
+                />
+                <CardContent>
+                    <Typography variant="body2"><b>Doctor's Comment:</b> {diagnosis.comment ? diagnosis.comment[0] ? diagnosis.comment[0].comment : '' : ''}</Typography>
+                    <Grid container>
+                        <Grid spacing={3} container className={classes.row}  justify="space-between">
+                            <Grid item><Typography variant="body1"></Typography></Grid>
+                            <Grid item><Typography variant="body2">Dr. A</Typography></Grid>
+                        </Grid>
+                        <Grid spacing={3} container className={classes.row} justify="space-between">
+                            <Grid item><Typography variant="body2">{formatDate(diagnosis.diagnosis_date)}</Typography></Grid>
+                            <Grid item><div className={classes.severity}></div></Grid>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </CardActionArea>
+        </Card>
     )
 }

@@ -27,7 +27,8 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Button from '@material-ui/core/Button';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { getAuthUser, isAuthenticated } from '../services/auth'
-
+import { logout } from '../services/auth'
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 const drawerWidth = 240;
 
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
-            width: drawerWidth,
+            width: 'max-content',
             flexShrink: 0,
         },
     },
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
-        },
+        }
     },
     grow: {
         flexGrow: 1,
@@ -74,6 +75,8 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             display: 'block',
         },
+        textDecoration: 'none',
+        color: 'unset'
     },
     inputRoot: {
         color: 'inherit',
@@ -104,8 +107,12 @@ const useStyles = makeStyles((theme) => ({
 
 function ResponsiveDrawer(props) {
 
+    let __logout = (e) => { }
     useEffect(() => {
         if (!isAuthenticated()) { navigate('/login') }
+        __logout = (e) => {
+            logout(() => navigate('/login'))
+          }
     })
     
     const { window } = props;
@@ -164,7 +171,7 @@ function ResponsiveDrawer(props) {
                         <ListItemText primary='Home' />
                     </ListItem>
                 </Link>
-                <Link to="page-2">
+                <Link to="/page-2">
                     <ListItem button key="Appointments">
                         <ListItemIcon><CalendarToday /></ListItemIcon>
                         <ListItemText primary="Appointments" />
@@ -172,7 +179,7 @@ function ResponsiveDrawer(props) {
                 </Link>
                 <Link to="/">
                     <ListItem button key="Statistics">
-                        <ListItemIcon></ListItemIcon>
+                        <ListItemIcon><TimelineIcon /></ListItemIcon>
                         <ListItemText primary="Statistics" />
                     </ListItem>
                 </Link>
@@ -253,9 +260,10 @@ function ResponsiveDrawer(props) {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" noWrap>
+                        <Link to="/" className={classes.title}>
+                            <Typography variant="h6" noWrap>
                             {props.title}
-                        </Typography>
+                        </Typography></Link>
                         <div>
 
                             <IconButton
@@ -295,7 +303,7 @@ function ResponsiveDrawer(props) {
                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                                 <MenuItem onClick={handleClose}>My account</MenuItem>
                                 <Divider />
-                                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                <MenuItem onClick={e => __logout(e)}>Logout</MenuItem>
                             </Menu>
                         </div>
                     </Toolbar>
