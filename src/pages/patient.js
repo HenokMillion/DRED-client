@@ -205,8 +205,9 @@ export default function PatientPage(props) {
                                                 patientData.diagnoses ?
                                                     patientData.diagnoses[patientData.diagnoses.length - 1] ?
                                                         patientData.diagnoses[patientData.diagnoses.length - 1].comment ?
+                                                        patientData.diagnoses[patientData.diagnoses.length - 1].comment[0] ?
                                                             patientData.diagnoses[patientData.diagnoses.length - 1].comment[0].severity
-                                                            : '-' : '-' : '-'}</b>
+                                                            : '-' : '-' : '-' : '-'}</b>
                                             </Typography></Grid>
                                         </Grid>
                                     </Grid>

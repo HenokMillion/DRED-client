@@ -72,7 +72,7 @@ export default function DiagnosisCard({ diagnosis }) {
                     title="Contemplative Reptile"
                 />
                 <CardContent>
-                    <Typography variant="body2"><b>Doctor's Comment:</b> {diagnosis.comment ? diagnosis.comment[0].comment : ''}</Typography>
+                    <Typography variant="body2"><b>Doctor's Comment:</b> {diagnosis.comment ? diagnosis.comment[0] ? diagnosis.comment[0].comment : '' : ''}</Typography>
                     <Grid container>
                         <Grid spacing={3} container className={classes.row}  justify="space-between">
                             <Grid item><Typography variant="body1"></Typography></Grid>

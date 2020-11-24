@@ -171,7 +171,7 @@ function ResponsiveDrawer(props) {
                         <ListItemText primary='Home' />
                     </ListItem>
                 </Link>
-                <Link to="page-2">
+                <Link to="/page-2">
                     <ListItem button key="Appointments">
                         <ListItemIcon><CalendarToday /></ListItemIcon>
                         <ListItemText primary="Appointments" />

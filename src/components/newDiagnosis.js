@@ -347,10 +347,10 @@ export default function NewDiagnosis(props) {
                                         <div>
                                             <RadioGroup aria-label="severity" name="severity" value={selectedValue} onChange={handleChange}>
                                                 <FormControlLabel value="0" control={<NoDRRadio />} label="No DR" />
-                                                <FormControlLabel value="1" control={<MildDRRadio />} label="Mild" />
-                                                <FormControlLabel value="2" control={<NonSevereDRRadio />} label="..." />
-                                                <FormControlLabel value="3" control={<AcuteDRRadio />} label="Acute" />
-                                                <FormControlLabel value="4" control={<SevereDRRadio />} label="Severe" />
+                                                <FormControlLabel value="1" control={<MildDRRadio />} label="Acute" />
+                                                <FormControlLabel value="2" control={<NonSevereDRRadio />} label="Chronic" />
+                                                <FormControlLabel value="3" control={<AcuteDRRadio />} label="Severe" />
+                                                <FormControlLabel value="4" control={<SevereDRRadio />} label="Critical" />
                                             </RadioGroup>
                                         </div>
                                     </Grid>
