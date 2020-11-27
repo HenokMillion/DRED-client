@@ -8,7 +8,7 @@ export const post = async (url, data) => {
     })
 }
 
-export const put = async (url, data) => {
+export const put = (url, data) => {
     return axios.put(url, data, {
         headers: {
             'Content-Type': 'application/json',
@@ -17,10 +17,11 @@ export const put = async (url, data) => {
     })
 }
 
-export const get = async (url) => {
+export const get = (url, headers={}) => {
     return axios.get(url, {
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...headers
         }
     })
 }

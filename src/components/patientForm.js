@@ -281,12 +281,12 @@ export default function PatientForm(props) {
                                                 fullWidth
                                                 id="patientID"
                                                 label="PatientID"
-                                                value={selectedPatient ? selectedPatient.paitentId : 'PT'.concat(Date.now().toString())}
+                                                value={selectedPatient ? selectedPatient.patientId : 'PT'.concat(Date.now().toString())}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                                 helperText="e.g. PT123123"
-                                                defaultValue={selectedPatient ? selectedPatient.paitentId : ''}
+                                                defaultValue={selectedPatient ? selectedPatient.patientId : ''}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
