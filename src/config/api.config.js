@@ -5,5 +5,8 @@ export const routes = {
     EDIT_DIAGNOSIS: GATEWAY + 'diagnosis/edit/',
     DELETE_DIAGNOSIS: GATEWAY + 'diagnosis/delete/',
     PATIENT: GATEWAY + 'patient/',
-    ALL_PATIENTS: GATEWAY + 'patient/all'
+    ALL_PATIENTS: GATEWAY + 'patient/all',
+    DOCTOR: GATEWAY + 'doctor/',
+    SEARCH_PATIENTS: GATEWAY + '/patient/search/',
+    APPOINTMENT: GATEWAY + '/appointment/'
 }

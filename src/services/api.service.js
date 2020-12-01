@@ -1,5 +1,12 @@
 import { post, multipartPost, put, get } from './http'
 import { routes } from '../config/api.config'
+import { getAuthUser } from './auth'
+
+let HEADER = {}
+
+export const setHeader = (header) => {
+    HEADER = header
+}
 
 export const saveDiagnosis = (file, doctorId, patientId) => {
     return multipartPost(routes.SAVE_DIAGNOSIS, {
@@ -12,14 +19,27 @@ export const saveDiagnosis = (file, doctorId, patientId) => {
 export const editDiagnosis = (diagnosisId, diagnosis) => {
     return put(routes.EDIT_DIAGNOSIS+diagnosisId, {
         newDiagnosis: diagnosis
-    })
+    }, HEADER)
 }
 
 export const fetchPatientDataById = async (patientId) => {
-    const patientData = await get(routes.PATIENT+patientId)
+    const patientData = await get(routes.PATIENT+patientId, HEADER)
     return patientData.data.data
 }
 
 export const fetchAllPatients = async () => {
-    return await get(routes.ALL_PATIENTS, { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6bnVsbCwiZmlyc3ROYW1lIjoibmFtZSIsImxhc3ROYW1lIjoibG5hbWUiLCJyb2xlIjoiU3RyaW5nIiwiYXBwb2ludG1lbnRzIjpbXSwiY2FuQ29tbWVudCI6dHJ1ZSwiY2FuTGFiZWwiOnRydWUsInByb2ZpbGVQaWNQYXRoIjoiU3RyaW5nIiwicGF0aWVudHMiOltdLCJpYXQiOjE2MDY0NjY0MTB9.IT4W019zkfruknyQRdcnVGVoK_x1rkdz14sIsklQYo8' })
+    return await get(routes.ALL_PATIENTS, HEADER)
+}
+
+
+export const listAppointments = async () => {
+    return await get(routes.DOCTOR+getAuthUser().id+'/appointments', HEADER)
+}
+
+export const searchPatients = async (partialName) => {
+    return await get(routes.SEARCH_PATIENTS+partialName, HEADER)
+}
+
+export const saveAppointment = async (appointment) => {
+    return await post(routes.APPOINTMENT+'new', appointment, HEADER)
 }
