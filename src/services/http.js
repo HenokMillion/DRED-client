@@ -1,18 +1,20 @@
 import axios from 'axios'
 
-export const post = async (url, data) => {
+export const post = async (url, data, headers={}) => {
     return axios.post(url, data, {
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...headers
         }
     })
 }
 
-export const put = (url, data) => {
+export const put = (url, data, headers={}) => {
     return axios.put(url, data, {
         headers: {
             'Content-Type': 'application/json',
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            ...headers
         }
     })
 }
