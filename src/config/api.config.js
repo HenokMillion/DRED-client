@@ -4,5 +4,6 @@ export const routes = {
     SAVE_DIAGNOSIS: GATEWAY + 'diagnosis/new/',
     EDIT_DIAGNOSIS: GATEWAY + 'diagnosis/edit/',
     DELETE_DIAGNOSIS: GATEWAY + 'diagnosis/delete/',
-    PATIENT: GATEWAY + 'patient/'
+    PATIENT: GATEWAY + 'patient/',
+    ALL_PATIENTS: GATEWAY + 'patient/all'
 }

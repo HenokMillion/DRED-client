@@ -26,6 +26,37 @@ import { fetchPatientDataById } from '../services/api.service'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { formatDate } from '../utils/time.util'
 import PatientForm from "../components/patientForm";
+import { ArgumentScale, Animation } from '@devexpress/dx-react-chart';
+import {
+    Chart,
+    ArgumentAxis,
+    ValueAxis,
+    LineSeries,
+    Title,
+    Legend,
+} from '@devexpress/dx-react-chart-material-ui';
+import {
+    curveCatmullRom,
+    line,
+} from 'd3-shape';
+import { scalePoint } from 'd3-scale';
+
+const Line = props => (
+    <LineSeries.Path
+        {...props}
+        path={line()
+            .x(({ arg }) => arg)
+            .y(({ val }) => val)
+            .curve(curveCatmullRom)}
+    />
+);
+
+const data = [{ date: 'Nov 2019', severity: "no DR" },
+{ date: 'Dec 2019', severity: 'no DR' },
+{ date: 'Mar 2020', severity: 'Acute' },
+{ date: 'Jul 2020', severity: 'Chronic' },
+{ date: 'Aug 2020', severity: 'Chronic' },
+{ date: 'Oct 2020', severity: "Severe" }]
 
 const extractPageMatchParams = (props) => {
     if (props.pageContext.matchPath) {
@@ -205,9 +236,9 @@ export default function PatientPage(props) {
                                                 patientData.diagnoses ?
                                                     patientData.diagnoses[patientData.diagnoses.length - 1] ?
                                                         patientData.diagnoses[patientData.diagnoses.length - 1].comment ?
-                                                        patientData.diagnoses[patientData.diagnoses.length - 1].comment[0] ?
-                                                            patientData.diagnoses[patientData.diagnoses.length - 1].comment[0].severity
-                                                            : '-' : '-' : '-' : '-'}</b>
+                                                            patientData.diagnoses[patientData.diagnoses.length - 1].comment[0] ?
+                                                                patientData.diagnoses[patientData.diagnoses.length - 1].comment[0].severity
+                                                                : '-' : '-' : '-' : '-'}</b>
                                             </Typography></Grid>
                                         </Grid>
                                     </Grid>
@@ -260,7 +291,23 @@ export default function PatientPage(props) {
                                 </div>
                             </Paper>
                             <Paper elevation={2} className={classes.historyContainer}>
-                                <Typography variant='h6'>History</Typography>
+                                <div>
+                                    <Typography variant='h6'>History</Typography>
+                                </div>
+                                <div>
+                                    <Chart
+                                        data={data}>
+                                        <ArgumentScale factory={scalePoint} />
+                                        <ArgumentAxis />
+                                        <ValueAxis />
+                                        <LineSeries
+                                            name="DR Status"
+                                            valueField="severity"
+                                            argumentField="date"
+                                            seriesComponent={Line}
+                                        />
+                                    </Chart>
+                                </div>
                             </Paper>
                         </div>
                     </Grid>

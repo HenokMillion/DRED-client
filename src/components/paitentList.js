@@ -5,21 +5,50 @@ import Modal from '@material-ui/core/Modal';
 import { Button } from '@material-ui/core';
 import PatientForm from './patientForm';
 import { navigate } from "gatsby"
+import { fetchAllPatients } from '../services/api.service';
+import { formatDate } from '../utils/time.util'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class PaitentList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isModalOpen: false,
-            paitents: [
-                { id: '12312321', paitentId: '1234', patientName: 'Aschalew Tamene', patientAge: 45, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
-                { id: '12312322', paitentId: '1234', patientName: 'Ambachew Demeke', patientAge: 22, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
-                { id: '12312323', paitentId: '1234', patientName: 'Yilqal Tesema', patientAge: 34, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
-                { id: '123123234', paitentId: '1234', patientName: 'Nakachew Tamene', patientAge: 56, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
+            isLoadingPatients: false,
+            patients: [
+                // { id: '12312321', paitentId: '1234', patientName: 'Aschalew Tamene', patientAge: 45, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
+                // { id: '12312322', paitentId: '1234', patientName: 'Ambachew Demeke', patientAge: 22, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
+                // { id: '12312323', paitentId: '1234', patientName: 'Yilqal Tesema', patientAge: 34, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
+                // { id: '123123234', paitentId: '1234', patientName: 'Nakachew Tamene', patientAge: 56, patientSex: 'male', patientLastDiagnosis: new Date(Date.now()).toDateString(), patientLastStatus: 'severe', patientNextAppointement: new Date(Date.now()).toDateString() },
             ],
             selectedPatient: null
         };
         this.handleModalClose = this.handleModalClose.bind(this);
+    }
+
+    async componentDidMount() {
+        this.setState({ isLoadingPatients: true })
+        const patients = (await fetchAllPatients()).data.data
+        const _patients = []
+        patients.map(patient => {
+            const _patient = {}
+            _patient.id = patient._id
+            _patient.patientId = patient.patientId
+            _patient.patientName = patient.firstName + ' ' + patient.lastName
+            _patient.patientAge = new Date().getUTCFullYear() - new Date(patient.birthDate).getUTCFullYear()
+            _patient.patientSex = patient.sex
+            _patient.patientLastDiagnosis = patient.diagnoses ? patient.diagnoses[patient.diagnoses.length - 1] ?
+                formatDate(patient.diagnoses[patient.diagnoses.length - 1].diagnosis_date) : '-' : '-'
+            _patient.patientLastStatus = patient.diagnoses ?
+                patient.diagnoses[patient.diagnoses.length - 1] ?
+                    patient.diagnoses[patient.diagnoses.length - 1].comment ?
+                        patient.diagnoses[patient.diagnoses.length - 1].comment[0] ?
+                            patient.diagnoses[patient.diagnoses.length - 1].comment[0].severity
+                            : '-' : '-' : '-' : '-'
+            _patient.patientNextAppointement = 'Nov 13 2021'
+            _patients.push(_patient)
+        })
+        this.setState({ patients: _patients, isLoadingPatients: false })
     }
 
     handleModalClose() {
@@ -45,7 +74,7 @@ class PaitentList extends Component {
 
     render() {
         const columns = [
-            { field: 'paitentId', headerName: 'Patient ID', width: 100 },
+            { field: 'patientId', headerName: 'Patient ID', width: 100 },
             { field: 'patientName', headerName: 'Patient Name', width: 450 },
             { field: 'patientAge', headerName: 'Age', width: 75 },
             { field: 'patientSex', headerName: 'Sex', width: 75 },
@@ -96,16 +125,20 @@ class PaitentList extends Component {
                     handleModalClose={this.handleModalClose}
                     /* patient props needs to be given here*/ />
                 <div style={{ height: "75vh", }}>
-                    <DataGrid
-                        onRowClick={e => {
-                            setTimeout(() => {
-                                if (!this.state.isModalOpen) {
-                                    navigate('/patient/' + e.data.paitentId)
-                                }
-                            }, 200)
-                        }}
-                        columns={columns}
-                        rows={this.state.paitents} />
+                    {this.state.isLoadingPatients && <CircularProgress />}
+                    {!this.state.isLoadingPatients &&
+                        <DataGrid
+                            onRowClick={e => {
+                                setTimeout(() => {
+                                    if (!this.state.isModalOpen) {
+                                        navigate('/patient/' + e.data.patientId)
+                                    }
+                                }, 200)
+                            }}
+                            columns={columns}
+                            rows={this.state.patients} />
+                    }
+
                 </div>
             </>
         );
