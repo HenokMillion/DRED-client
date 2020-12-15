@@ -10,30 +10,32 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <HomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Home" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <CalendarTodayIcon />
-      </ListItemIcon>
-      <ListItemText primary="Appointments" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShowChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Statistics" />
-    </ListItem>
-  </div>
-);
+export default function mainListItems() {
+  return (
+    <div>
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <CalendarTodayIcon />
+        </ListItemIcon>
+        <ListItemText primary="Appointments" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <ShowChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Statistics" />
+      </ListItem>
+    </div>
+  )
+};
 
-export const secondaryListItems = (
-  <div>
-  </div>
-);
+// export const secondaryListItems = (
+//   <div>
+//   </div>
+// );

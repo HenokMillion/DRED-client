@@ -150,13 +150,14 @@ export default function PatientPage(props) {
 
     const handleEditClose = () => {
         setOpenEdit(!openEdit)
+        
     }
 
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
     });
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState({});
     const [openEdit, setOpenEdit] = React.useState(false);
     const [patientData, setPatientData] = React.useState(null);
 
