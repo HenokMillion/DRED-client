@@ -67,7 +67,7 @@ class Login extends React.Component {
                                 <Image type="loginimg" />
                             </Grid>
                             <Grid item lg={6} style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                                <h1>Login</h1>
+                                <h3>Login</h3>
                                 <Grid item>
                                 </Grid>
                                 <form onSubmit={e => this.login(e)}>

@@ -282,7 +282,7 @@ export default function PatientPage(props) {
                             <Paper elevation={2}>
                                 <div className={classes.diagnosesContainer}>
                                     <Typography variant='h6'>Diagnoses</Typography>
-                                    <NewDiagnosis handleClosingTasks={handleClose} />
+                                    <NewDiagnosis patient={patientData} handleClosingTasks={handleClose} />
                                 </div>
                                 <div className={classes.row}>
                                     {

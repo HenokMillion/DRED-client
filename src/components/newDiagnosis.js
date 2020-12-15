@@ -28,6 +28,7 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import clsx from 'clsx'
 import { CheckCircleOutline } from '@material-ui/icons';
+import { getAuthUser } from '../services/auth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -165,7 +166,7 @@ const SevereDRRadio = withStyles({
     checked: {},
 })((props) => <Radio color="default" name="severity" {...props} />);
 export default function NewDiagnosis(props) {
-    const { handleClosingTasks } = props
+    const { handleClosingTasks, patient } = props
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [diagnosis, setDiagnosis] = React.useState({});
@@ -183,8 +184,7 @@ export default function NewDiagnosis(props) {
         [classes.buttonSuccess]: success,
     });
 
-    let doctorId = '5faa5d122de51f1cc15226bf'
-    let patientId = '1234'
+    let doctorId = getAuthUser().id
     let diagnosisResult = {}
 
     const handleClickOpen = () => {
@@ -241,7 +241,7 @@ export default function NewDiagnosis(props) {
     const diagnose = () => {
         setDiagnosing(true)
         setTimeout(() => {
-            apiService.saveDiagnosis(file, doctorId, patientId)
+            apiService.saveDiagnosis(file, doctorId, patient.patientId)
                 .then(resp => {
                     setDiagnosis(resp.data.data)
                     setDiagnosisSuccess(true)
