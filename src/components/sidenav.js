@@ -179,12 +179,12 @@ function ResponsiveDrawer(props) {
                         <ListItemText primary="Appointments" />
                     </ListItem>
                 </Link>
-                <Link to="/">
+                {/* <Link to="/">
                     <ListItem button key="Statistics">
                         <ListItemIcon><TimelineIcon /></ListItemIcon>
                         <ListItemText primary="Statistics" />
                     </ListItem>
-                </Link>
+                </Link> */}
             </List>
             <div style={{ bottom: '0', position: 'absolute' }}>
                 <Button><LockOutlinedIcon /> Terms</Button>
@@ -267,7 +267,7 @@ function ResponsiveDrawer(props) {
                             {props.title}
                         </Typography></Link>
                         <div>
-
+{/* 
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
@@ -276,7 +276,7 @@ function ResponsiveDrawer(props) {
                                 <Badge badgeContent={16} color="secondary">
                                     <NotificationsIcon />
                                 </Badge>
-                            </IconButton>
+                            </IconButton> */}
                             <Button
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"

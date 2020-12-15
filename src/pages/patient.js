@@ -24,7 +24,7 @@ import DiagnosisCard from '../components/diagnosisCard';
 import { match } from '@reach/router/lib/utils';
 import { fetchPatientDataById } from '../services/api.service'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { formatDate } from '../utils/time.util'
+import { formatDate, months } from '../utils/time.util'
 import PatientForm from "../components/patientForm";
 import { ArgumentScale, Animation } from '@devexpress/dx-react-chart';
 import {
@@ -51,7 +51,7 @@ const Line = props => (
     />
 );
 
-const data = [{ date: 'Nov 2019', severity: "no DR" },
+let chartData = [{ date: 'Nov 2019', severity: "no DR" },
 { date: 'Dec 2019', severity: 'no DR' },
 { date: 'Mar 2020', severity: 'Acute' },
 { date: 'Jul 2020', severity: 'Chronic' },
@@ -150,7 +150,6 @@ export default function PatientPage(props) {
 
     const handleEditClose = () => {
         setOpenEdit(!openEdit)
-        
     }
 
     const Transition = React.forwardRef(function Transition(props, ref) {
@@ -161,15 +160,22 @@ export default function PatientPage(props) {
     const [openEdit, setOpenEdit] = React.useState(false);
     const [patientData, setPatientData] = React.useState(null);
 
-
     const formatDate = (date) => {
+    }
 
+    const formatDateMY = date => {
+        date = new Date(date)
+        return `${months[date.getUTCMonth()]} ${date.getUTCFullYear()}`
     }
 
     useEffect(() => {
         if (patientData === null) {
             fetchPatientDataById(params.id)
                 .then(data => {
+                    chartData = []
+                    data.diagnoses.map(diagnosis => {
+                        chartData.push({ date: formatDateMY(diagnosis.diagnosis_date), severity: diagnosis.severity })
+                    })
                     setPatientData(data)
                 })
                 .catch(err => console.error('ERR: ', err))
@@ -263,7 +269,7 @@ export default function PatientPage(props) {
                                     <Grid item><Typography variant="body2"><b>Nov 13 2021</b></Typography></Grid>
                                 </Grid>
                             </Grid>
-                            <Grid container className={classes.actionsContainer} justify="flex-end">
+                            {/* <Grid container className={classes.actionsContainer} justify="flex-end">
                                 <Grid item>
                                     <Button aria-label="delete" onClick={handleEditClose}>
                                         <EditIcon /> Edit Record
@@ -274,7 +280,7 @@ export default function PatientPage(props) {
                                         <DeleteIcon /> Delete Record
                                     </Button>
                                 </Grid>
-                            </Grid>
+                            </Grid> */}
                         </Paper>
                     </Grid>
                     <Grid item xs={9}>
@@ -297,18 +303,21 @@ export default function PatientPage(props) {
                                     <Typography variant='h6'>History</Typography>
                                 </div>
                                 <div>
-                                    <Chart
-                                        data={data}>
-                                        <ArgumentScale factory={scalePoint} />
-                                        <ArgumentAxis />
-                                        <ValueAxis />
-                                        <LineSeries
-                                            name="DR Status"
-                                            valueField="severity"
-                                            argumentField="date"
-                                            seriesComponent={Line}
-                                        />
-                                    </Chart>
+                                    {
+                                        patientData &&
+                                        <Chart
+                                            data={chartData}>
+                                            <ArgumentScale factory={scalePoint} />
+                                            <ArgumentAxis />
+                                            <ValueAxis />
+                                            <LineSeries
+                                                name="DR Status"
+                                                valueField="severity"
+                                                argumentField="date"
+                                                seriesComponent={Line}
+                                            />
+                                        </Chart>
+                                    }
                                 </div>
                             </Paper>
                         </div>

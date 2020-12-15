@@ -1,4 +1,4 @@
-const months = ['Jan',
+export const months = ['Jan',
     'Feb',
     'Mar',
     'Apr',
@@ -13,8 +13,12 @@ const months = ['Jan',
 
 export const formatDate = date => {
     date = new Date(date)
-    console.log('DATE: ', date)
     return `${months[date.getUTCMonth()]} ${date.getUTCDate()} ${date.getUTCFullYear()}`
+}
+
+export const formatDateMY = date => {
+    date = new Date(date)
+    return `${months[date.getUTCMonth()]} ${date.getUTCFullYear()}`
 }
 
 export const formatDateTime = date => {
