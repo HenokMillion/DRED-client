@@ -67,7 +67,7 @@ export default function DiagnosisCard({ diagnosis }) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image={DOMAIN+diagnosis.imagePath.replace('uploads/','')}
+                    image={DOMAIN+diagnosis.imagePath}
                     title="Contemplative Reptile"
                 />
                 <CardContent>
