@@ -155,25 +155,51 @@ export default function PatientForm(props) {
     };
 
     const savePatient = (patient) => {
-        apiService.savePatient({
-            'patientId': patientId,
-            'firstName': patientFName,
-            'lastName': patientLName,
-            'birthDate': selectedDate,
-            'sex': patientSex,
-            'profilePicPath': '',
-            'email': patientEmail,
-            'phone': patientPhone,
-            'address': patientAddress,
-            'fileNumber': patientFileNumber,
-        })
-            .then(resp => {
-                setSuccess(true)
-                setTimeout(() => setIsModalOpen(false), 3000)
-                
-
+        if (selectedPatient) {
+            apiService.editPatient({
+                'info': {
+                    'patientId': patientId,
+                    'firstName': patientFName,
+                    'lastName': patientLName,
+                    'birthDate': selectedDate,
+                    'sex': patientSex,
+                    'profilePicPath': '',
+                    'email': patientEmail,
+                    'phone': patientPhone,
+                    'address': patientAddress,
+                    'fileNumber': patientFileNumber,
+                }
             })
-            .catch(err => console.error(err))
+                .then(resp => {
+                    setSuccess(true)
+                    setTimeout(() => {
+                        handleModalClose()
+                        setSuccess(false)
+                    }, 3000)
+                })
+                .catch(err => console.error(err))
+        } else {
+            apiService.savePatient({
+                'patientId': patientId,
+                'firstName': patientFName,
+                'lastName': patientLName,
+                'birthDate': selectedDate,
+                'sex': patientSex,
+                'profilePicPath': '',
+                'email': patientEmail,
+                'phone': patientPhone,
+                'address': patientAddress,
+                'fileNumber': patientFileNumber,
+            })
+                .then(resp => {
+                    setSuccess(true)
+                    setTimeout(() => {
+                        handleModalClose()
+                        setSuccess(false)
+                    }, 3000)
+                })
+                .catch(err => console.error(err))
+        }
     }
 
     return (
@@ -296,6 +322,7 @@ export default function PatientForm(props) {
                                                 id="patientPhone"
                                                 label="Phone"
                                                 onChange={e => setpatientPhone(e.target.value)}
+                                                defaultValue={selectedPatient ? selectedPatient.phone : ''}
                                                 helperText="e.g. 0900000000"
                                             />
                                         </Grid>
@@ -305,6 +332,7 @@ export default function PatientForm(props) {
                                                 id="patientEmail"
                                                 label="Email"
                                                 onChange={e => setpatientEmail(e.target.value)}
+                                                defaultValue={selectedPatient ? selectedPatient.email : ''}
                                                 helperText="e.g. akebede@dred.io"
                                             />
                                         </Grid>
@@ -313,6 +341,7 @@ export default function PatientForm(props) {
                                                 fullWidth
                                                 id="patientAddress"
                                                 label="Address"
+                                                defaultValue={selectedPatient ? selectedPatient.address : ''}
                                                 onChange={e => setpatientAddress(e.target.value)}
                                                 helperText="e.g. Summit Bole, Addis Ababa, ET"
                                             />
@@ -338,8 +367,10 @@ export default function PatientForm(props) {
                                         <Grid item xs={12} sm={6}>
                                             <TextField
                                                 fullWidth
+                                                disabled={selectedPatient}
                                                 id="patientFileNo"
                                                 onChange={e => setpatientFileNumber(e.target.value)}
+                                                defaultValue={selectedPatient ? selectedPatient.fileNumber : ''}
                                                 label="File No"
                                                 helperText="e.g. DRED_1234"
                                             />
@@ -349,13 +380,13 @@ export default function PatientForm(props) {
                                         <Grid item xs={12}>
                                             <Button onClick={savePatient} variant="contained" color="primary">Save</Button>
                                         </Grid>
+                                        {
+                                            success &&
+                                            <Alert variant="filled" severity="success">
+                                                Diagnosis saved successfully
+                                                </Alert>
+                                        }
                                     </Grid>
-                                    {
-                                        success &&
-                                        <Alert variant="filled" severity="success">
-                                            Diagnosis saved successfully
-                                        </Alert>
-                                    }
                                 </form>
                             </Container>
                         </Grid>

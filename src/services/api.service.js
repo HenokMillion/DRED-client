@@ -44,6 +44,10 @@ export const saveAppointment = async (appointment) => {
     return await post(routes.APPOINTMENT+'new', appointment, HEADER)
 }
 
+export const editPatient = async (data) => {
+    return await post(routes.EDIT_PATIENT+data.info.patientId, data, HEADER)
+}
+
 export const savePatient = async (patient) => {
     return await post(routes.REGISTER_PATIENT, patient, HEADER)
 }

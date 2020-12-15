@@ -5,7 +5,7 @@ import Modal from '@material-ui/core/Modal';
 import { Button } from '@material-ui/core';
 import PatientForm from './patientForm';
 import { navigate } from "gatsby"
-import { fetchAllPatients } from '../services/api.service';
+import { fetchAllPatients, fetchPatientDataById } from '../services/api.service';
 import { formatDate } from '../utils/time.util'
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -27,6 +27,10 @@ class PaitentList extends Component {
     }
 
     async componentDidMount() {
+        this.fetchPatients()
+    }
+
+    async fetchPatients() {
         this.setState({ isLoadingPatients: true })
         const patients = (await fetchAllPatients()).data.data
         const _patients = []
@@ -46,6 +50,10 @@ class PaitentList extends Component {
                             patient.diagnoses[patient.diagnoses.length - 1].comment[0].severity
                             : '-' : '-' : '-' : '-'
             _patient.patientNextAppointement = 'Nov 13 2021'
+            _patient.email = patient.email
+            _patient.phone = patient.phone
+            _patient.fileNumber = patient.fileNumber
+            _patient.address = patient.address
             _patients.push(_patient)
         })
         this.setState({ patients: _patients, isLoadingPatients: false })
@@ -56,6 +64,7 @@ class PaitentList extends Component {
             selectedPatient: null,
             isModalOpen: !prevState.isModalOpen
         }));
+        this.fetchPatients()
     }
 
     getModalStyle() {
