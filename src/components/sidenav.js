@@ -302,8 +302,6 @@ function ResponsiveDrawer(props) {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
                                 <Divider />
                                 <MenuItem onClick={e => __logout(e)}>Logout</MenuItem>
                             </Menu>
