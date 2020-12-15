@@ -114,10 +114,18 @@ export default function PatientForm(props) {
     const { selectedPatient } = props
     console.log('PROPS: ', props)
     const [patientSex, setpatientSex] = React.useState('');
+    const [patientFName, setpatientFName] = React.useState('');
     const [patientLName, setpatientLName] = React.useState('');
+    const [patientPhone, setpatientPhone] = React.useState('');
+    const [patientEmail, setpatientEmail] = React.useState('');
+    const [patientAddress, setpatientAddress] = React.useState('');
     const [filePath, setFilePath] = React.useState('');
+    const [patientId, setpatientId] = React.useState('PT'.concat(Date.now().toString()));
+    const [patientFileNumber, setpatientFileNumber] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
     const [selectedValue, setSelectedValue] = React.useState(null);
+    const [patient, setPatient] = React.useState(selectedPatient);
+    const [success, setSuccess] = React.useState(false);
 
     const handleClickOpen = () => {
         handleModalClose()
@@ -142,10 +150,32 @@ export default function PatientForm(props) {
         }
     };
 
-
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
+
+    const savePatient = (patient) => {
+        apiService.savePatient({
+            'patientId': patientId,
+            'firstName': patientFName,
+            'lastName': patientLName,
+            'birthDate': selectedDate,
+            'sex': patientSex,
+            'profilePicPath': '',
+            'email': patientEmail,
+            'phone': patientPhone,
+            'address': patientAddress,
+            'fileNumber': patientFileNumber,
+        })
+            .then(resp => {
+                setSuccess(true)
+                setTimeout(() => setIsModalOpen(false), 3000)
+                
+
+            })
+            .catch(err => console.error(err))
+    }
+
     return (
         <div>
             {
@@ -212,6 +242,7 @@ export default function PatientForm(props) {
                                                 id="patientFirstName"
                                                 label="First Name"
                                                 helperText="e.g. Abebe"
+                                                onChange={e => setpatientFName(e.target.value)}
                                                 defaultValue={selectedPatient ? selectedPatient.patientName.split(' ')[0] : ''}
                                             />
                                         </Grid>
@@ -221,6 +252,7 @@ export default function PatientForm(props) {
                                                 id="patientLastName"
                                                 label="Last Name"
                                                 helperText="e.g. Kebede"
+                                                onChange={e => setpatientLName(e.target.value)}
                                                 defaultValue={selectedPatient ? selectedPatient.patientName.split(' ')[1] : ''}
                                             />
                                         </Grid>
@@ -231,6 +263,7 @@ export default function PatientForm(props) {
                                                 select
                                                 label="Sex"
                                                 onChange={handleChange}
+                                                onChange={e => setpatientSex(e.target.value)}
                                                 helperText="Please select your sex"
                                                 defaultValue={selectedPatient ? selectedPatient.patientSex : ''}
                                             >
@@ -260,8 +293,18 @@ export default function PatientForm(props) {
                                         <Grid item xs={12} sm={6}>
                                             <TextField
                                                 fullWidth
+                                                id="patientPhone"
+                                                label="Phone"
+                                                onChange={e => setpatientPhone(e.target.value)}
+                                                helperText="e.g. 0900000000"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                fullWidth
                                                 id="patientEmail"
                                                 label="Email"
+                                                onChange={e => setpatientEmail(e.target.value)}
                                                 helperText="e.g. akebede@dred.io"
                                             />
                                         </Grid>
@@ -270,6 +313,7 @@ export default function PatientForm(props) {
                                                 fullWidth
                                                 id="patientAddress"
                                                 label="Address"
+                                                onChange={e => setpatientAddress(e.target.value)}
                                                 helperText="e.g. Summit Bole, Addis Ababa, ET"
                                             />
                                         </Grid>
@@ -281,10 +325,12 @@ export default function PatientForm(props) {
                                                 fullWidth
                                                 id="patientID"
                                                 label="PatientID"
-                                                value={selectedPatient ? selectedPatient.patientId : 'PT'.concat(Date.now().toString())}
+                                                disabled={true}
+                                                value={selectedPatient ? selectedPatient.patientId : patientId}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                onChange={e => setpatientId(e.target.value)}
                                                 helperText="e.g. PT123123"
                                                 defaultValue={selectedPatient ? selectedPatient.patientId : ''}
                                             />
@@ -293,6 +339,7 @@ export default function PatientForm(props) {
                                             <TextField
                                                 fullWidth
                                                 id="patientFileNo"
+                                                onChange={e => setpatientFileNumber(e.target.value)}
                                                 label="File No"
                                                 helperText="e.g. DRED_1234"
                                             />
@@ -300,9 +347,15 @@ export default function PatientForm(props) {
                                     </Grid>
                                     <Grid container xs={12} justify="flex-end">
                                         <Grid item xs={12}>
-                                            <Button variant="contained" color="primary">Save</Button>
+                                            <Button onClick={savePatient} variant="contained" color="primary">Save</Button>
                                         </Grid>
                                     </Grid>
+                                    {
+                                        success &&
+                                        <Alert variant="filled" severity="success">
+                                            Diagnosis saved successfully
+                                        </Alert>
+                                    }
                                 </form>
                             </Container>
                         </Grid>

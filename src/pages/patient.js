@@ -85,7 +85,8 @@ export default function PatientPage(props) {
         },
         row: {
             display: 'flex',
-            flexDirection: 'row'
+            flexDirection: 'row',
+            overflow: 'scroll'
         },
         diagnosesContainer: {
             display: 'flex',

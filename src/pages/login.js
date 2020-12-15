@@ -58,21 +58,20 @@ class Login extends React.Component {
     render() {
         return (
             <Container style={{ display: 'flex', justifyContent: "center", alignItems: "center", backgroundColor: '#E4DFED', width: '100vw', height: '100vh', margin: '0', maxWidth: 'unset' }}>
-                {/* <Image type="left" /> */}
                 <Paper style={{ width: '60vw', position: 'relative' }}>
                     {this.renderProgress()}
                     <Container style={{padding: '64px 30px'}}>
                         <SEO title="Login" />
                         <Grid container spacing={1} item>
                             <Grid item lg={6}>
-                                {/* <Image type="loginimg" /> */}
+                                <Image type="loginimg" />
                             </Grid>
-                            <Grid container justify="center" lg={6} style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                            <Grid item lg={6} style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                                 <h1>Login</h1>
                                 <Grid item>
                                 </Grid>
                                 <form onSubmit={e => this.login(e)}>
-                                    <Grid container spacing={3} xs={12} justify="center">
+                                    <Grid container spacing={3} justify="center">
                                         <Grid item xs={7}>
                                             <TextField fullWidth disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: e.target.value, password: this.state.user.password } })} id="username" label="Username" variant="outlined" />
                                         </Grid>
@@ -80,7 +79,7 @@ class Login extends React.Component {
                                             <TextField fullWidth disabled={this.state.loggingIn} onChange={e => this.setState({ user: { username: this.state.user.username, password: e.target.value } })} id="password" label="Password" type="password" variant="outlined" />
                                         </Grid>
                                     </Grid>
-                                    <Grid container spacing={3} xs={12} justify="center">
+                                    <Grid container spacing={3} justify="center">
                                         <Grid item xs={7}>
                                             <Button fullWidth type="submit"
                                                 disabled={this.state.loggingIn}
@@ -88,7 +87,7 @@ class Login extends React.Component {
                                                 style={{ marginBottom: 10 }}>
                                                 SIGN IN
                                             </Button>
-                                            <Grid item xs={12} justify="flex-end" >
+                                            <Grid container justify="flex-end" >
                                                 <Link to="#">Forgot Password?</Link>
                                             </Grid>
                                         </Grid>

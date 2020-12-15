@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import { formatDateTime } from '../utils/time.util'
 import { AddCircleOutlined } from "@material-ui/icons"
 import AppointmentForm from "components/appointmentForm"
+import { Paper } from "@material-ui/core"
 
 function SecondPage() {
   const [loading, setLoading] = React.useState(true);
@@ -76,7 +77,7 @@ function SecondPage() {
   const handleOpenDialog = () => {
     setNewDialoOpened(true)
   }
-  
+
   const handleCloseModal = () => {
     console.log('handling close...')
     setNewDialoOpened(false)
@@ -85,24 +86,26 @@ function SecondPage() {
   return (
     <Layout>
       <SEO title="Appointments" />
-      <Button variant="outlined" color="primary" onClick={handleOpenDialog}>
-        <AddCircleOutlined /> New Appointment
+      <Paper>
+        <Button variant="outlined" color="primary" onClick={handleOpenDialog}>
+          <AddCircleOutlined /> New Appointment
       </Button>
-      {
-        newDialogOpened && <AppointmentForm selectedPatient={patient} newDialogOpened={newDialogOpened} setNewDialoOpened={setNewDialoOpened} fetchAppointments={fetchAppointments} handleCloseModal={handleCloseModal} appointments={appointments} />
-      }
-      <h1>Appointments</h1>
-      {
-        loading ?
-          <CircularProgress /> :
-          <div style={{ height: '70vh' }}>
-            <DataGrid
-              pageSize={7}
-              columns={columns}
-              rows={appointments}
-            />
-          </div>
-      }
+        {
+          newDialogOpened && <AppointmentForm selectedPatient={patient} newDialogOpened={newDialogOpened} setNewDialoOpened={setNewDialoOpened} fetchAppointments={fetchAppointments} handleCloseModal={handleCloseModal} appointments={appointments} />
+        }
+        <h1>Appointments</h1>
+        {
+          loading ?
+            <CircularProgress /> :
+            <div style={{ height: '70vh' }}>
+              <DataGrid
+                pageSize={7}
+                columns={columns}
+                rows={appointments}
+              />
+            </div>
+        }
+      </Paper>
     </Layout>
   )
 }

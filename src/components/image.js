@@ -38,16 +38,18 @@ export const Image = (props) => {
   data.allFile.edges = data.allFile.edges.filter(image => {
     return image.node.base.indexOf(props.type) > -1
   })
+  console.log(data.allFile.edges)
   return (
     <div>
-      {data.allFile.edges.map(image => (
+    {
+      data.allFile.edges.map(image => (
         <Img
           key={image.node.base}
           fluid={image.node.childImageSharp.fluid}
           alt={image.node.base.split(".")[0]} // only use section of the file extension with the filename
         />
-      ))}
-    </div>
+      ))
+    }</div>
   )
 
   if (!data?.placeholderImage?.childImageSharp?.fluid) {
