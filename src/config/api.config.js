@@ -1,4 +1,6 @@
-export const DOMAIN = 'http://localhost:3000/'
+// export const DOMAIN = 'http://localhost:3000/'
+export const DOMAIN = 'https://dredcore.herokuapp.com/'
+
 const GATEWAY = DOMAIN+'api/v1/'
 export const routes = {
     SAVE_DIAGNOSIS: GATEWAY + 'diagnosis/new/',
