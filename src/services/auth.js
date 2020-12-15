@@ -2,12 +2,13 @@ import { post } from './http'
 import jwt_decode from "jwt-decode";
 import * as memoryStorage from 'localstorage-memory'
 import * as ApiService from './api.service'
+import { routes } from '../config/api.config'
+
 const windowGlobal = typeof window !== 'undefined' && window;
 const localAdapter = windowGlobal ?
   windowGlobal.localStorage :
   memoryStorage
 
-const AUTH_URL = 'http://localhost:3000/api/v1/auth'
 let authUser = {}
 
 const setAuthUser = user =>
@@ -28,7 +29,7 @@ export const isAuthenticated = () => getAuthUser()
 
 export const handleLogin = async (user) => {
   const { username, password } = user
-  const authResponse = await post(AUTH_URL, { username: username, password: password })
+  const authResponse = await post(routes.LOGIN, { username: username, password: password })
   if (authResponse.status === 200) {
     const token = authResponse.data.data
     saveToken(token)

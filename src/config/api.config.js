@@ -3,6 +3,7 @@ export const DOMAIN = 'https://dredcore.herokuapp.com/'
 
 const GATEWAY = DOMAIN+'api/v1/'
 export const routes = {
+    LOGIN: GATEWAY + 'auth',
     SAVE_DIAGNOSIS: GATEWAY + 'diagnosis/new/',
     EDIT_DIAGNOSIS: GATEWAY + 'diagnosis/edit/',
     DELETE_DIAGNOSIS: GATEWAY + 'diagnosis/delete/',
