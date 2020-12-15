@@ -69,7 +69,7 @@ export default function AppointmentForm(props) {
     appointments.reduce((store, appointment) => {
         if (!store) { store = [] }
         if (store.indexOf(appointment.patientId) < 0) {
-            patients.push(appointment)
+            // patients.push(appointment)
             return store.concat(appointment.patientId)
         } else {
             return store
@@ -108,7 +108,7 @@ export default function AppointmentForm(props) {
         setSavingAppointment(true)
         setTimeout(() => {
             patients.map(patient => {
-                if (patient.patientName === patientName) {
+                if (patient.patientName === patientName && !savingAppointment) {
                     setPatient(patient)
                     saveAppointment({
                         patientId: patient.patientId,
