@@ -96,7 +96,13 @@ function SecondPage() {
         <h1>Appointments</h1>
         {
           loading ?
-            <CircularProgress /> :
+            <div style={{
+              minHeight: '30vh',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+          }}><CircularProgress /></div> :
             <div style={{ height: '70vh' }}>
               <DataGrid
                 pageSize={7}
