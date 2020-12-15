@@ -54,7 +54,7 @@ function SecondPage() {
     { field: 'patientFileNumber', headerName: 'Patient File Number', width: 200 },
     { field: 'patientId', headerName: 'Patient ID', width: 250 },
     {
-      field: '', headerName: 'Action',
+      field: '', headerName: '',
       renderCell: (params) => (
         <strong>
           <Button

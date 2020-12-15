@@ -134,7 +134,13 @@ class PaitentList extends Component {
                     handleModalClose={this.handleModalClose}
                     /* patient props needs to be given here*/ />
                 <div style={{ height: "75vh", }}>
-                    {this.state.isLoadingPatients && <CircularProgress />}
+                    {this.state.isLoadingPatients && <div style={{
+                        minHeight: '30vh',
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}><CircularProgress /></div>}
                     {!this.state.isLoadingPatients &&
                         <DataGrid
                             onRowClick={e => {

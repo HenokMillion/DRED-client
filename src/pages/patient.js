@@ -121,6 +121,13 @@ export default function PatientPage(props) {
         historyContainer: {
             marginTop: 40,
             padding: '12px'
+        },
+        centered: {
+            minHeight: '30vh',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
         }
     }))
 
@@ -333,7 +340,7 @@ export default function PatientPage(props) {
                             handleModalClose={handleEditClose} />
                     }
                 </Grid>
-                : <CircularProgress />}</Layout>
+                : <div className={classes.centered}><CircularProgress /></div>}</Layout>
     )
 
 }

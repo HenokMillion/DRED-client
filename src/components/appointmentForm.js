@@ -20,7 +20,7 @@ import { CheckOutlined } from "@material-ui/icons";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import { searchPatients, saveAppointment } from '../services/api.service'
+import { searchPatients, saveAppointment, fetchAllPatients } from '../services/api.service'
 import { getAuthUser } from "../services/auth";
 
 function Alert(props) {
@@ -57,11 +57,12 @@ export default function AppointmentForm(props) {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [savingAppointment, setSavingAppointment] = React.useState(false);
     const [appointmentDate, setAppointmentDate] = React.useState(null)
-    const patients = []
+    const [patients, setPatients] = React.useState([])
+    const [fetchedPatients, setFetchedPatients] = React.useState(false)
     // "yyyy-MM-ddThh:mm
     if (patient) {
         let dt = new Date(patient.appointmentDate)
-        dt = `${dt.getUTCFullYear()}-${dt.getUTCMonth()}-${dt.getUTCDate()}T${dt.getUTCHours()}:${dt.getUTCMinutes() < 10 ? '0'+dt.getUTCMinutes() : dt.getUTCMinutes()}`
+        dt = `${dt.getUTCFullYear()}-${dt.getUTCMonth()}-${dt.getUTCDate()}T${dt.getUTCHours()}:${dt.getUTCMinutes() < 10 ? '0' + dt.getUTCMinutes() : dt.getUTCMinutes()}`
         patient.appointmentDate = dt
     }
 
@@ -80,6 +81,28 @@ export default function AppointmentForm(props) {
         fetchAppointments()
         setNewDialoOpened(false)
     }
+
+    const fetchPatients = () => {
+        fetchAllPatients()
+            .then(resp => {
+                resp.data.data.map(patient => {
+                    let _ap = {}
+                    _ap.patientName = patient.firstName + ' ' + patient.lastName
+                    _ap.patientPhone = patient.phone
+                    _ap.patientId = patient.patientId
+                    _ap.patientFileNumber = patient.fileNumber
+                    _ap.id = patient._id
+                    patients.push(_ap)
+                })
+                setFetchedPatients(true)
+            })
+    }
+    useEffect(() => {
+        if (!fetchedPatients) {
+            fetchPatients()
+        }
+    })
+
 
     const handleSaveAppointment = () => {
         setSavingAppointment(true)
@@ -168,7 +191,7 @@ export default function AppointmentForm(props) {
                     </Grid>
                     <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
                         <Alert onClose={handleSnackbarClose} severity="success">
-                            This is a success message!
+                            Appointment Saved Successfully!
                         </Alert>
                     </Snackbar>
                 </Grid>
