@@ -20,10 +20,9 @@ import { formatDate } from '../utils/time.util'
 import { DOMAIN } from '../config/api.config'
 
 export default function DiagnosisCard({ diagnosis }) {
-    console.log('DIAGNOSIS: ', diagnosis)
     const useStyles = makeStyles((theme) => ({
         root: {
-            maxWidth: 200,
+            minWidth: 200,
             margin: 10
         },
         media: {

@@ -41,12 +41,14 @@ const useStyles = makeStyles((theme) => ({
             width: 'max-content',
             flexShrink: 0,
         },
+        backgroundColor: '#E4DFED'
     },
     appBar: {
         [theme.breakpoints.up('sm')]: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
         },
+        backgroundColor: '#E4DFED'
     },
     menuButton: {
         marginRight: theme.spacing(2),
