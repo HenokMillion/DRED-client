@@ -91,7 +91,7 @@ class PaitentList extends Component {
             { field: 'patientNextAppointement', headerName: 'Appointment', width: 150 },
             { field: 'patientLastStatus', headerName: 'Status', width: 150 },
             {
-                field: '', headerName: 'Action',
+                field: '', headerName: '',
                 renderCell: (params) => (
                     <strong>
                         <Button
