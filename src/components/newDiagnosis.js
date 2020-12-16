@@ -332,8 +332,11 @@ export default function NewDiagnosis(props) {
                                 {
                                     diagnosis.severity ? (
                                         <div>
-                                            <Alert severity="success">No signs of DR</Alert>
-                                            <p>{diagnosis.severity}</p>
+                                            {diagnosis.severity === 0 && <Alert severity="success">No Signs of DR!</Alert>}
+                                            {diagnosis.severity === 1 && <Alert severity="info">Acute DR Detected</Alert>}
+                                            {diagnosis.severity === 2 && <Alert severity="warning">Chronic DR Detected</Alert>}
+                                            {diagnosis.severity === 3 && <Alert severity="error">Severe DR Detected</Alert>}
+                                            {diagnosis.severity === 4 || diagnosis.severity === 5 && <Alert severity="error">Critical DR Detected</Alert>}
                                         </div>
                                     ) : null
                                 }
