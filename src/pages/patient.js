@@ -209,7 +209,7 @@ export default function PatientPage(props) {
                                 </Grid>
                                 <Grid container className={classes.layout}>
                                     <Grid container justify="space-between">
-                                        <Grid item><Typography variant="body2">Age</Typography></Grid>
+                                        <Grid item><Typography variant="body2">Birth Date</Typography></Grid>
                                         <Grid item><Typography variant="body2"><b>{patientData.birthDate}</b></Typography></Grid>
                                     </Grid>
                                     <Grid container justify="space-between">

@@ -595,3 +595,9 @@ pre tt:after {
     font-size: 100%;
   }
 }
+
+.MuiDrawer-paperAnchorDockedLeft > div > div {
+  background-color: #6749A7;
+  width: 100%;
+  color: white;
+}
